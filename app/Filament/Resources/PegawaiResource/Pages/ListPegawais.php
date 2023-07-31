@@ -16,4 +16,11 @@ class ListPegawais extends ListRecords
             Actions\CreateAction::make(),
         ];
     }
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            PegawaiResource\Widgets\StatsOverview::class,
+        ];
+    }
 }
