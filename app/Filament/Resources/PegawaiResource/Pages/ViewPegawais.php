@@ -16,4 +16,9 @@ class ViewPegawai extends ViewRecord
             Actions\EditAction::make(),
         ];
     }
+
+    protected function getRedirectUrl(): string
+    {
+    return $this->getResource()::getUrl('index');
+    }
 }

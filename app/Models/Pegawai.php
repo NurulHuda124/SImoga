@@ -16,6 +16,11 @@ class Pegawai extends Model
         return $this->hasMany(Divisi::class);
     }
 
+    public function kontrak()
+    {
+    return $this->hasMany(Kontrak::class);
+    }
+
     public function jabatan()
     {
         return $this->hasMany(Jabatan::class);

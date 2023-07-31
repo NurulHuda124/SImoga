@@ -13,6 +13,6 @@ class Kontrak extends Model
 
     public function pegawai(): BelongsTo
     {
-    return $this->belongsTo(Pegawai::class, 'nama_pegawai','email','tanggal_kontrak_awal', 'tanggal_kontrak_akhir');
+    return $this->belongsTo(Pegawai::class,'nama_pegawai');
     }
 }

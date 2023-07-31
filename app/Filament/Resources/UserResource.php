@@ -32,9 +32,12 @@ class UserResource extends Resource
             ->schema([
                 Card::make()
                 ->schema([
-                TextInput::make('name')->required(),
-                TextInput::make('email')->required(),
-                TextInput::make('password')->required()->hiddenOn('edit'),
+                TextInput::make('name')->required()->label('Nama'),
+                TextInput::make('email')->required()->label('Email Address'),
+                TextInput::make('password')->password()
+                ->minLength(8)
+                ->required(fn(Page $livewire):bool => $livewire instanceof CreateRecord)
+                ->dehydrated(fn($state)=> Hash::make($state)),
                 ])
             ]);
     }

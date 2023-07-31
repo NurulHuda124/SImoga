@@ -21,7 +21,7 @@ use Filament\Tables\Columns\TextColumn;
 
 class PensiunResource extends Resource
 {
-    protected static ?string $model = Pegawai::class;
+    protected static ?string $model = Pensiun::class;
 
     protected static ?string $pluralModelLabel= 'Pensiun';
     protected static ?string $navigationLabel = 'Pensiun';
@@ -33,7 +33,13 @@ class PensiunResource extends Resource
     {
         return $form
             ->schema([
-                //
+                 Card::make()
+                ->schema([
+                TextInput::make('nama_pegawai')->required(),
+                TextInput::make('email')->required(),
+                DatePicker::make('tanggal_lahir')->format('Y-m-d')->required(),
+                TextInput::make('status_pensiun')->required(),
+                ])
             ]);
     }
 
@@ -41,7 +47,10 @@ class PensiunResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('nama_pegawai'),
+                TextColumn::make('email'),
+                TextColumn::make('tanggal_lahir')->date(),
+                TextColumn::make('status_pensiun'),
             ])
             ->filters([
                 //
