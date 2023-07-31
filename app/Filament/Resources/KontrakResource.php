@@ -34,7 +34,14 @@ class KontrakResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Card::make()
+                ->schema([
+                TextInput::make('nama_pegawai')->required(),
+                TextInput::make('email')->required(),
+                DatePicker::make('tanggal_kontrak_awal')->format('Y-m-d')->required(),
+                DatePicker::make('tanggal_kontrak_akhir')->format('Y-m-d')->required(),
+                TextInput::make('status_kontrak')->required(),
+                ])
             ]);
     }
 
@@ -42,17 +49,11 @@ class KontrakResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('pegawais.nama_pegawai'),
-                TextColumn::make('pegawais.email'),
-                TextColumn::make('pegawais.tempat_lahir'),
-                TextColumn::make('pegawais.tanggal_lahir')->date(),
-                TextColumn::make('pegawais.alamat'),
-                TextColumn::make('pegawais.no_telp'),
-                TextColumn::make('pegawais.jabatan'),
-                TextColumn::make('pegawais.divisi'),
-                TextColumn::make('pegawais.jenis_mitra'),
-                TextColumn::make('pegawais.tanggal_kontrak_awal')->date(),
-                TextColumn::make('pegawais.tanggal_kontrak_akhir')->date(),
+                TextColumn::make('nama_pegawai'),
+                TextColumn::make('email'),
+                TextColumn::make('tanggal_kontrak_awal')->date(),
+                TextColumn::make('tanggal_kontrak_akhir')->date(),
+                TextColumn::make('status_kontrak'),
             ])
             ->filters([
                 //
@@ -69,7 +70,7 @@ class KontrakResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            // RelationManagers\PegawaiRelationManager::class
         ];
     }
     
@@ -77,7 +78,7 @@ class KontrakResource extends Resource
     {
         return [
             'index' => Pages\ListKontraks::route('/'),
-            // 'create' => Pages\CreateKontrak::route('/create'),
+            'create' => Pages\CreateKontrak::route('/create'),
             'view' => Pages\ViewKontrak::route('/{record}'),
             'edit' => Pages\EditKontrak::route('/{record}/edit'),
         ];
