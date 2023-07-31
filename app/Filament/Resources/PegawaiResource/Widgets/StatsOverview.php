@@ -3,10 +3,9 @@
 namespace App\Filament\Resources\PegawaiResource\Widgets;
 use App\Models\MitraPerusahaan;
 use App\Models\Pegawai;
-use Filament\Widgets\StatsOverviewWidget\Card;
 use Filament\Widgets\Widget;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
-
+use Filament\Widgets\StatsOverviewWidget\Card;
 
 class StatsOverview extends BaseWidget
 {
@@ -18,13 +17,9 @@ class StatsOverview extends BaseWidget
          $jmlhAudit= Pegawai::where('jenis_mitra', 'Audit')->count('jenis_mitra');
          $jmlhKonsultan = Pegawai::where('jenis_mitra', 'Konsultan')->count('jenis_mitra');
         return [
-            Card::make('Jumlah Pegawai TKJP', $jmlhTKJP)
-            ->chart([7, 2, 10, 3, 15, 4, 17])
-            ->color('success'),
-            Card::make('Jumlah Pegawai Audit', $jmlhAudit)->chart([7, 8, 2, 15, 20, 15, 2, 8, 7])
-            ->color('danger'),
-            Card::make('Jumlah Pegawai Konsultan', $jmlhKonsultan)->chart([17, 4, 15, 3, 10, 2, 7])
-            ->color('warning'),
+            Card::make('Jumlah Pegawai TKJP', '100'),
+            Card::make('Jumlah Pegawai Kontraktor', '75'),
+            Card::make('Jumlah Pegawai Konsultan', '150'),
         ];
     }
 }
