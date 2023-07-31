@@ -21,6 +21,7 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Widgets\StatsOverviewWidget;
 
 class PegawaiResource extends Resource
 {
@@ -71,7 +72,7 @@ class PegawaiResource extends Resource
                 TextColumn::make('jenis_mitra'),
                 TextColumn::make('tanggal_kontrak_awal')->date(),
                 TextColumn::make('tanggal_kontrak_akhir')->date(),
-            ])            
+            ])
             ->filters([
                 //
             ])
@@ -83,14 +84,14 @@ class PegawaiResource extends Resource
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
-    
+
     public static function getRelations(): array
     {
         return [
             //
         ];
     }
-    
+
     public static function getPages(): array
     {
         return [
@@ -99,5 +100,12 @@ class PegawaiResource extends Resource
             'view' => Pages\ViewPegawai::route('/{record}'),
             'edit' => Pages\EditPegawai::route('/{record}/edit'),
         ];
-    }    
+    }
+
+    public static function getWidgets(): array
+    {
+        return [
+            StatsOverviewWidget::class
+        ];
+    }
 }
