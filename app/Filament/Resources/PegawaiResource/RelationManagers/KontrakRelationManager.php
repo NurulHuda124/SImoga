@@ -31,6 +31,16 @@ class KontrakRelationManager extends RelationManager
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('nama_pegawai'),
+                Tables\Columns\TextColumn::make('email'),
+                Tables\Columns\TextColumn::make('tempat_lahir'),
+                Tables\Columns\TextColumn::make('tanggal_lahir')->date(),
+                Tables\Columns\TextColumn::make('alamat'),
+                Tables\Columns\TextColumn::make('no_telp'),
+                Tables\Columns\TextColumn::make('jabatan'),
+                Tables\Columns\TextColumn::make('divisi'),
+                Tables\Columns\TextColumn::make('jenis_mitra'),
+                Tables\Columns\TextColumn::make('tanggal_kontrak_awal')->date(),
+                Tables\Columns\TextColumn::make('tanggal_kontrak_akhir')->date(),
             ])
             ->filters([
                 //

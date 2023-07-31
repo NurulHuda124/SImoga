@@ -22,6 +22,8 @@ use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Widgets\StatsOverviewWidget;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
 
 class PegawaiResource extends Resource
 {
@@ -74,7 +76,12 @@ class PegawaiResource extends Resource
                 TextColumn::make('tanggal_kontrak_akhir')->date(),
             ])
             ->filters([
-                //
+                SelectFilter::make('jenis_mitra')
+                ->options([
+                'TKJP'=>'TKJP',
+                'Konsultan'=>'Konsultan',
+                'Audit'=>'Audit',
+                ])
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
