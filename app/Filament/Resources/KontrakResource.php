@@ -70,7 +70,7 @@ class KontrakResource extends Resource
     public static function getRelations(): array
     {
         return [
-            // RelationManagers\PegawaiRelationManager::class
+            RelationManagers\PegawaiRelationManager::class
         ];
     }
     

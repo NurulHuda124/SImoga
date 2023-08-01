@@ -1,15 +1,14 @@
 <?php
 
-namespace App\Filament\Resources\PegawaiResource\Widgets;
+namespace App\Filament\Widgets\Dashboard;
 
 use App\Models\MitraPerusahaan;
 use App\Models\Pegawai;
 use Filament\Widgets\StatsOverviewWidget\Card;
-use Filament\Widgets\Widget;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 
 
-class StatsOverview extends BaseWidget
+class PegawaiCount extends BaseWidget
 {
     //protected static string $view = 'filament.resources.pegawai-resource.widgets.stats-overview';
 
