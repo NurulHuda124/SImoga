@@ -3,7 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\KontrakResource\Pages;
-use App\Filament\Resources\KontrakResource\RelationManagers;
+use App\Filament\Resources\PegawaiResource\Pages\ViewPegawai;
 use App\Models\Kontrak;
 use App\Models\Pegawai;
 use Filament\Forms;
@@ -19,6 +19,7 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\IconColumn;
 
 class KontrakResource extends Resource
 {
@@ -34,14 +35,14 @@ class KontrakResource extends Resource
     {
         return $form
             ->schema([
-                Card::make()
-                ->schema([
-                TextInput::make('nama_pegawai')->required(),
-                TextInput::make('email')->required(),
-                DatePicker::make('tanggal_kontrak_awal')->format('Y-m-d')->required(),
-                DatePicker::make('tanggal_kontrak_akhir')->format('Y-m-d')->required(),
-                TextInput::make('status_kontrak')->required(),
-                ])
+                // Card::make()
+                // ->schema([
+                // TextInput::make('nama_pegawai')->required(),
+                // TextInput::make('email')->required(),
+                // DatePicker::make('tanggal_kontrak_awal')->format('Y-m-d')->required(),
+                // DatePicker::make('tanggal_kontrak_akhir')->format('Y-m-d')->required(),
+                // TextInput::make('status_kontrak')->required(),
+                // ])
             ]);
     }
 
@@ -53,14 +54,22 @@ class KontrakResource extends Resource
                 TextColumn::make('email'),
                 TextColumn::make('tanggal_kontrak_awal')->date(),
                 TextColumn::make('tanggal_kontrak_akhir')->date(),
-                TextColumn::make('status_kontrak'),
+                IconColumn::make('status_kontrak')
+                ->options([
+                'heroicon-o-x-circle',
+                'heroicon-o-check-circle' => fn ($state): bool => $state > 0,
+                ])
+                ->colors([
+                'danger',
+                'success' => fn ($state): bool => $state > 0,
+                ])->size('xl'),
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                // Tables\Actions\ViewAction::make(),
+                // Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
@@ -70,7 +79,7 @@ class KontrakResource extends Resource
     public static function getRelations(): array
     {
         return [
-            RelationManagers\PegawaiRelationManager::class
+            // 
         ];
     }
     
@@ -78,9 +87,9 @@ class KontrakResource extends Resource
     {
         return [
             'index' => Pages\ListKontraks::route('/'),
-            'create' => Pages\CreateKontrak::route('/create'),
-            'view' => Pages\ViewKontrak::route('/{record}'),
-            'edit' => Pages\EditKontrak::route('/{record}/edit'),
+            // 'create' => Pages\CreateKontrak::route('/create'),
+            'view' => PegawaiResource\Pages\ViewPegawai::route('/{record}'),
+            // 'edit' => Pages\EditKontrak::route('/{record}/edit'),
         ];
     }    
 }
