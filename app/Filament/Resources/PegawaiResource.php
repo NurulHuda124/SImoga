@@ -108,4 +108,5 @@ class PegawaiResource extends Resource
             StatsOverviewWidget::class
         ];
     }
+    
 }
