@@ -16,4 +16,10 @@ class ListMitraPerusahaans extends ListRecords
             Actions\CreateAction::make(),
         ];
     }
+    protected function getHeaderWidgets(): array
+    {   
+        return [
+            MitraPerusahaanResource\Widgets\StatsOverview::class,
+        ];
+    }
 }

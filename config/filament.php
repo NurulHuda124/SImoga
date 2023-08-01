@@ -13,6 +13,7 @@ use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
+
 return [
 
     /*
@@ -139,8 +140,8 @@ return [
         'namespace' => 'App\\Filament\\Widgets',
         'path' => app_path('Filament/Widgets'),
         'register' => [
-            Widgets\AccountWidget::class,
-            // Widgets\FilamentInfoWidget::class,
+            //Widgets\AccountWidget::class,
+            //Widgets\FilamentInfoWidget::class,
         ],
     ],
 
