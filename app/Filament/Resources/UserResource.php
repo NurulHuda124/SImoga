@@ -35,9 +35,7 @@ class UserResource extends Resource
                 TextInput::make('name')->required()->label('Nama'),
                 TextInput::make('email')->required()->label('Email Address'),
                 TextInput::make('password')->password()
-                ->minLength(8)
-                ->required(fn(Page $livewire):bool => $livewire instanceof CreateRecord)
-                ->dehydrated(fn($state)=> Hash::make($state)),
+                ->minLength(8),
                 ])
             ]);
     }

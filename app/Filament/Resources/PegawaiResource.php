@@ -84,7 +84,7 @@ class PegawaiResource extends Resource
                 ])
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
+                Tables\Actions\ViewAction::make()->color('success'),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -95,7 +95,7 @@ class PegawaiResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            // 
         ];
     }
 
