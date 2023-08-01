@@ -30,7 +30,6 @@ class PegawaiCount extends BaseWidget
             ->color('danger'),
             Card::make('Jumlah Pegawai Mendekati Pensiun', $jmlhKonsultan)->chart([17, 4, 15, 3, 10, 2, 7])
             ->color('warning'),
-
         ];
     }
 }
