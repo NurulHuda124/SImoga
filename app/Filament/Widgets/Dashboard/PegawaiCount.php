@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Filament\Resources\PegawaiResource\Widgets;
+namespace App\Filament\Widgets\Dashboard;
 
 use App\Models\MitraPerusahaan;
 use App\Models\Pegawai;
-use Filament\Widgets\Widget;
-use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Card;
+use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 
-class StatsOverview extends BaseWidget
+
+class PegawaiCount extends BaseWidget
 {
     //protected static string $view = 'filament.resources.pegawai-resource.widgets.stats-overview';
 
@@ -18,6 +18,7 @@ class StatsOverview extends BaseWidget
          $jmlhAudit= Pegawai::where('jenis_mitra', 'Audit')->count('jenis_mitra');
          $jmlhKonsultan = Pegawai::where('jenis_mitra', 'Konsultan')->count('jenis_mitra');
         return [
+
             Card::make('Jumlah Pegawai TKJP', $jmlhTKJP)
             ->chart([7, 2, 10, 3, 15, 4, 17])
             ->color('success'),
@@ -25,6 +26,7 @@ class StatsOverview extends BaseWidget
             ->color('danger'),
             Card::make('Jumlah Pegawai Konsultan', $jmlhKonsultan)->chart([17, 4, 15, 3, 10, 2, 7])
             ->color('warning'),
+
         ];
     }
 }

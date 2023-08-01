@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Card;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Widgets\StatsOverviewWidget;
 
 class MitraPerusahaanResource extends Resource
 {
@@ -78,4 +79,10 @@ class MitraPerusahaanResource extends Resource
             'edit' => Pages\EditMitraPerusahaan::route('/{record}/edit'),
         ];
     }    
+    public static function getWidgets(): array
+    {
+        return [
+            StatsOverviewWidget::class
+        ];
+    }
 }
