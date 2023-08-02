@@ -25,8 +25,8 @@ class Pegawai extends Model
     {
         return $this->hasMany(Jabatan::class);
     }
-    public function mitra_perusahaan(): BelongsTo
-    {
-        return $this->belongsTo(MitraPerusahaan::class, 'jenis_mitra');
-    }
+    // public function mitra_perusahaan(): BelongsTo
+    // {
+    //     return $this->belongsTo(MitraPerusahaan::class, 'jenis_mitra');
+    // }
 }
