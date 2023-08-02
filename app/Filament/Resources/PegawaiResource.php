@@ -23,6 +23,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
+use Closure;
 
 class PegawaiResource extends Resource
 {
@@ -53,7 +54,10 @@ class PegawaiResource extends Resource
                 Select::make('jenis_mitra')->required()
                 ->options(MitraPerusahaan::all()->pluck('jenis_mitra', 'jenis_mitra')),
                 Select::make('nama_perusahaan')->required()
-                ->options(MitraPerusahaan::all()->pluck('nama_perusahaan', 'nama_perusahaan')),
+                ->searchable()
+                ->options(function (Closure $get) {
+                return MitraPerusahaan::where('jenis_mitra', $get('jenis_mitra'))->pluck('nama_perusahaan',
+                'nama_perusahaan');}),
                 DatePicker::make('tanggal_kontrak_awal')->format('Y-m-d')->required(),
                 DatePicker::make('tanggal_kontrak_akhir')->format('Y-m-d')->required(),
                 ])
@@ -65,17 +69,17 @@ class PegawaiResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('nama_pegawai')->searchable(),
-                TextColumn::make('email')->searchable(),
-                TextColumn::make('tempat_lahir')->searchable(),
-                TextColumn::make('tanggal_lahir')->date()->searchable(),
-                TextColumn::make('alamat')->searchable(),
-                TextColumn::make('no_telp')->searchable(),
+                TextColumn::make('email')->searchable()->toggleable(),
+                TextColumn::make('tempat_lahir')->searchable()->toggleable(),
+                TextColumn::make('tanggal_lahir')->date()->searchable()->toggleable(),
+                TextColumn::make('alamat')->searchable()->toggleable(),
+                TextColumn::make('no_telp')->searchable()->toggleable(),
                 TextColumn::make('jabatan')->searchable(),
                 TextColumn::make('divisi')->searchable(),
                 TextColumn::make('jenis_mitra')->searchable(),
-                TextColumn::make('nama_perusahaan')->searchable(),
-                TextColumn::make('tanggal_kontrak_awal')->date()->searchable(),
-                TextColumn::make('tanggal_kontrak_akhir')->date()->searchable(),
+                TextColumn::make('nama_perusahaan')->searchable()->toggleable(),
+                TextColumn::make('tanggal_kontrak_awal')->date()->searchable()->toggleable(),
+                TextColumn::make('tanggal_kontrak_akhir')->date()->searchable()->toggleable(),
             ])
             ->filters([
                 SelectFilter::make('jenis_mitra')

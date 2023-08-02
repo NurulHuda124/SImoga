@@ -20,6 +20,7 @@ use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\BadgeColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Widgets\StatsOverviewWidget;
 
 class PensiunResource extends Resource
@@ -51,8 +52,8 @@ class PensiunResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('nama_pegawai')->searchable(),
-                TextColumn::make('email')->searchable(),
-                TextColumn::make('tanggal_lahir')->date()->searchable(),
+                TextColumn::make('email')->searchable()->toggleable(),
+                TextColumn::make('tanggal_lahir')->date()->searchable()->toggleable(),
                 BadgeColumn::make('status_pensiun')->searchable()
                 ->colors([
                 'primary',
@@ -61,7 +62,11 @@ class PensiunResource extends Resource
                 ]),
             ])
             ->filters([
-                //
+                SelectFilter::make('status_pensiun')
+                ->options([
+                'Aktif'=>'Aktif',
+                'Pensiun'=>'Pensiun',
+                ])
             ])
             ->actions([
                 // Tables\Actions\ViewAction::make(),
