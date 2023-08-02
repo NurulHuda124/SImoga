@@ -13,13 +13,9 @@ use Filament\Resources\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\Card;
-use Filament\Forms\Components\Select;
+use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\IconColumn;
+use Filament\Widgets\StatsOverviewWidget;
 
 class KontrakResource extends Resource
 {
@@ -54,15 +50,12 @@ class KontrakResource extends Resource
                 TextColumn::make('email'),
                 TextColumn::make('tanggal_kontrak_awal')->date(),
                 TextColumn::make('tanggal_kontrak_akhir')->date(),
-                IconColumn::make('status_kontrak')
-                ->options([
-                'heroicon-o-x-circle',
-                'heroicon-o-check-circle' => fn ($state): bool => $state > 0,
-                ])
+                BadgeColumn::make('status_kontrak')
                 ->colors([
-                'danger',
-                'success' => fn ($state): bool => $state > 0,
-                ])->size('xl'),
+                'primary',
+                'success' => 'Berlaku',
+                'danger' => 'Tidak Berlaku',
+                ]),
             ])
             ->filters([
                 //
@@ -91,5 +84,12 @@ class KontrakResource extends Resource
             'view' => PegawaiResource\Pages\ViewPegawai::route('/{record}'),
             // 'edit' => Pages\EditKontrak::route('/{record}/edit'),
         ];
-    }    
+    }  
+    
+    public static function getWidgets(): array
+    {
+        return [
+            StatsOverviewWidget::class
+        ];
+    }
 }

@@ -7,7 +7,7 @@ use Filament\Widgets\LineChartWidget;
 class PegawaiLineChart extends LineChartWidget
 {
     protected static ?string $heading = 'Jumlah Pegawai Pensiun Tiap Tahunnya';
-
+    protected static ?int $sort = 3;
     protected function getData(): array
     {
         return [

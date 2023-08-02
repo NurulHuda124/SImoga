@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('email');
             $table->date('tanggal_kontrak_awal');
             $table->date('tanggal_kontrak_akhir');
-            $table->integer('status_kontrak');
+            $table->string('status_kontrak');
             $table->timestamps();
         });
     }

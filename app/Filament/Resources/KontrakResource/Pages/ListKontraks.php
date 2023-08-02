@@ -19,8 +19,14 @@ class ListKontraks extends ListRecords
 
     public static function getRelations(): array
     {
-    return [
-        RelationManagers\PegawaiRelationManager::class
-    ];
+        return [
+            RelationManagers\PegawaiRelationManager::class
+        ];
+    }
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            KontrakResource\Widgets\StatsOverview::class,
+        ];
     }
 }
