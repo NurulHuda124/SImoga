@@ -3,7 +3,6 @@
 namespace App\Filament\Widgets\Dashboard;
 
 use App\Models\MitraPerusahaan;
-use App\Models\Pegawai;
 use App\Models\Pensiun;
 use Filament\Widgets\StatsOverviewWidget\Card;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
@@ -24,9 +23,9 @@ class PegawaiCount extends BaseWidget
             ->description('Mitra Perusahaan')
             ->descriptionIcon('heroicon-o-presentation-chart-line')
             ->color('primary'),
-            Card::make('Jumlah Pegawai Kontrak Aktif', $jmlhAktif)->chart([7, 2, 10, 3, 15, 4, 17])
+            Card::make('Jumlah Pegawai Aktif', $jmlhAktif)->chart([7, 2, 10, 3, 15, 4, 17])
             ->color('success'),
-            Card::make('Jumlah Pegawai Kontrak Habis', $jmlhPensiun)->chart([17, 4, 15, 3, 10, 2, 7])
+            Card::make('Jumlah Pegawai Pensiun', $jmlhPensiun)->chart([17, 4, 15, 3, 10, 2, 7])
             ->color('danger'),
         ];
     }
