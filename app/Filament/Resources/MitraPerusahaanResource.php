@@ -48,10 +48,10 @@ class MitraPerusahaanResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('nama_perusahaan')->searchable(),
-                TextColumn::make('jenis_mitra'),
-                TextColumn::make('email'),
-                TextColumn::make('website'),
-                TextColumn::make('no_telp')
+                TextColumn::make('jenis_mitra')->searchable(),
+                TextColumn::make('email')->searchable(),
+                TextColumn::make('website')->searchable(),
+                TextColumn::make('no_telp')->searchable(),
             ])
             ->filters([
                 //

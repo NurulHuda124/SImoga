@@ -46,11 +46,11 @@ class KontrakResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('nama_pegawai'),
-                TextColumn::make('email'),
-                TextColumn::make('tanggal_kontrak_awal')->date(),
-                TextColumn::make('tanggal_kontrak_akhir')->date(),
-                BadgeColumn::make('status_kontrak')
+                TextColumn::make('nama_pegawai')->searchable(),
+                TextColumn::make('email')->searchable(),
+                TextColumn::make('tanggal_kontrak_awal')->date()->searchable(),
+                TextColumn::make('tanggal_kontrak_akhir')->date()->searchable(),
+                BadgeColumn::make('status_kontrak')->searchable()
                 ->colors([
                 'primary',
                 'success' => 'Berlaku',

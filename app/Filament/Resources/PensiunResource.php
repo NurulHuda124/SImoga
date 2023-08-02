@@ -50,10 +50,10 @@ class PensiunResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('nama_pegawai'),
-                TextColumn::make('email'),
-                TextColumn::make('tanggal_lahir')->date(),
-                BadgeColumn::make('status_pensiun')
+                TextColumn::make('nama_pegawai')->searchable(),
+                TextColumn::make('email')->searchable(),
+                TextColumn::make('tanggal_lahir')->date()->searchable(),
+                BadgeColumn::make('status_pensiun')->searchable()
                 ->colors([
                 'primary',
                 'success' => 'Aktif',

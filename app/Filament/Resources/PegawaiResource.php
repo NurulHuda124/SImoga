@@ -52,6 +52,8 @@ class PegawaiResource extends Resource
                 ->options(Divisi::all()->pluck('divisi', 'divisi')),
                 Select::make('jenis_mitra')->required()
                 ->options(MitraPerusahaan::all()->pluck('jenis_mitra', 'jenis_mitra')),
+                Select::make('nama_perusahaan')->required()
+                ->options(MitraPerusahaan::all()->pluck('nama_perusahaan', 'nama_perusahaan')),
                 DatePicker::make('tanggal_kontrak_awal')->format('Y-m-d')->required(),
                 DatePicker::make('tanggal_kontrak_akhir')->format('Y-m-d')->required(),
                 ])
@@ -63,16 +65,17 @@ class PegawaiResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('nama_pegawai')->searchable(),
-                TextColumn::make('email'),
-                TextColumn::make('tempat_lahir'),
-                TextColumn::make('tanggal_lahir')->date(),
-                TextColumn::make('alamat'),
-                TextColumn::make('no_telp'),
-                TextColumn::make('jabatan'),
-                TextColumn::make('divisi'),
-                TextColumn::make('jenis_mitra'),
-                TextColumn::make('tanggal_kontrak_awal')->date(),
-                TextColumn::make('tanggal_kontrak_akhir')->date(),
+                TextColumn::make('email')->searchable(),
+                TextColumn::make('tempat_lahir')->searchable(),
+                TextColumn::make('tanggal_lahir')->date()->searchable(),
+                TextColumn::make('alamat')->searchable(),
+                TextColumn::make('no_telp')->searchable(),
+                TextColumn::make('jabatan')->searchable(),
+                TextColumn::make('divisi')->searchable(),
+                TextColumn::make('jenis_mitra')->searchable(),
+                TextColumn::make('nama_perusahaan')->searchable(),
+                TextColumn::make('tanggal_kontrak_awal')->date()->searchable(),
+                TextColumn::make('tanggal_kontrak_akhir')->date()->searchable(),
             ])
             ->filters([
                 SelectFilter::make('jenis_mitra')
