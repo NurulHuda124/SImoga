@@ -35,7 +35,8 @@ class UserResource extends Resource
                 TextInput::make('name')->required()->label('Nama'),
                 TextInput::make('email')->required()->label('Email Address'),
                 TextInput::make('password')->password()
-                ->minLength(8),
+                 ->minLength(8),
+
                 ])
             ]);
     }
@@ -46,7 +47,7 @@ class UserResource extends Resource
             ->columns([
                 TextColumn::make('name')->label('Nama'),
                 TextColumn::make('email'),
-                TextColumn::make('password'),
+                // TextColumn::make('password'),
             ])
             ->filters([
                 //
@@ -58,14 +59,14 @@ class UserResource extends Resource
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
-    
+
     public static function getRelations(): array
     {
         return [
             //
         ];
     }
-    
+
     public static function getPages(): array
     {
         return [
@@ -73,5 +74,5 @@ class UserResource extends Resource
             'create' => Pages\CreateUser::route('/create'),
             'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
-    }    
+    }
 }

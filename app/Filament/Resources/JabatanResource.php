@@ -42,7 +42,7 @@ class JabatanResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('jabatan')
+                TextColumn::make('jabatan')->searchable()
             ])
             ->filters([
                 //

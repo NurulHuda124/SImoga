@@ -62,7 +62,7 @@ class PegawaiResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('nama_pegawai'),
+                TextColumn::make('nama_pegawai')->searchable(),
                 TextColumn::make('email'),
                 TextColumn::make('tempat_lahir'),
                 TextColumn::make('tanggal_lahir')->date(),
