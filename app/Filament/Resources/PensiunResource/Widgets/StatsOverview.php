@@ -13,10 +13,8 @@ class StatsOverview extends BaseWidget
         $jmlhAktif= Pensiun::where('status_pensiun', 'Aktif')->count('status_pensiun');
         $jmlhPensiun = Pensiun::where('status_pensiun', 'Pensiun')->count('status_pensiun');
         return [
-        Card::make('Jumlah Pegawai Aktif', $jmlhAktif)->chart([7, 8, 2, 15, 20, 15, 2, 8, 7])
-        ->color('success'),
-        Card::make('Jumlah Pegawai Pensiun', $jmlhPensiun)->chart([17, 4, 15, 3, 10, 2, 7])
-        ->color('danger'),
+        Card::make('Jumlah Pegawai Aktif', $jmlhAktif)->chart([7, 2, 10, 3, 15, 4, 17]),
+        Card::make('Jumlah Pegawai Pensiun', $jmlhPensiun)->chart([17, 4, 15, 3, 10, 2, 7]),
         ];
     }
 }
