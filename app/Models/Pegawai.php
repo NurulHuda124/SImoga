@@ -18,7 +18,7 @@ class Pegawai extends Model
 
     public function kontrak()
     {
-    return $this->hasMany(Kontrak::class);
+    return $this->hasMany(Kontrak::class, 'nama_pegawai');
     }
 
     public function jabatan()

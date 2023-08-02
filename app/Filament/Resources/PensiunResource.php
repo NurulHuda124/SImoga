@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\PensiunResource\Pages;
+use App\Filament\Resources\PegawaiResource\Pages\ViewPegawai;
 use App\Filament\Resources\PensiunResource\RelationManagers;
 use App\Models\Pensiun;
 use Filament\Forms;
@@ -18,6 +19,7 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\IconColumn;
 
 class PensiunResource extends Resource
 {
@@ -50,14 +52,22 @@ class PensiunResource extends Resource
                 TextColumn::make('nama_pegawai'),
                 TextColumn::make('email'),
                 TextColumn::make('tanggal_lahir')->date(),
-                TextColumn::make('status_pensiun'),
+                IconColumn::make('status_pensiun')
+                ->options([
+                'heroicon-o-x-circle' => fn ($state): bool => $state === 54,
+                'heroicon-o-check-circle',
+                ])
+                ->colors([
+                'danger' => fn ($state): bool => $state === 54,
+                'success',
+                ])->size('xl'),
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                // Tables\Actions\ViewAction::make(),
+                // Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
@@ -75,9 +85,9 @@ class PensiunResource extends Resource
     {
         return [
             'index' => Pages\ListPensiuns::route('/'),
-            'create' => Pages\CreatePensiun::route('/create'),
-            'view' => Pages\ViewPensiun::route('/{record}'),
-            'edit' => Pages\EditPensiun::route('/{record}/edit'),
+            // 'create' => Pages\CreatePensiun::route('/create'),
+            'view' => PegawaiResource\Pages\ViewPegawai::route('/{record}'),
+            // 'edit' => Pages\EditPensiun::route('/{record}/edit'),
         ];
     }    
 }

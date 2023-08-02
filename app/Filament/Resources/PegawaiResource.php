@@ -3,7 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\PegawaiResource\Pages;
-use App\Filament\Resources\PegawaiResource\RelationManagers;
 use App\Models\Pegawai;
 use App\Models\Jabatan;
 use App\Models\Divisi;
@@ -84,7 +83,7 @@ class PegawaiResource extends Resource
                 ])
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
+                Tables\Actions\ViewAction::make()->color('success'),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -95,7 +94,7 @@ class PegawaiResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            // 
         ];
     }
 

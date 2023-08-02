@@ -35,7 +35,8 @@ class UserResource extends Resource
                 TextInput::make('name')->required()->label('Nama'),
                 TextInput::make('email')->required()->label('Email Address'),
                 TextInput::make('password')->password()
-                ->minLength(8)
+                 ->minLength(8),
+
                 ])
             ]);
     }
