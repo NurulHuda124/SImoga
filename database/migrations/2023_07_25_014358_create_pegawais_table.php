@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('jabatan');
             $table->string('divisi');
             $table->string('jenis_mitra');
+            $table->string('nama_perusahaan');
             $table->date('tanggal_kontrak_awal'); 
             $table->date('tanggal_kontrak_akhir');
             $table->timestamps();

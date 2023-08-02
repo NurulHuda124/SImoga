@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Card;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Widgets\StatsOverviewWidget;
 
 class MitraPerusahaanResource extends Resource
@@ -48,13 +49,18 @@ class MitraPerusahaanResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('nama_perusahaan')->searchable(),
-                TextColumn::make('jenis_mitra'),
-                TextColumn::make('email'),
-                TextColumn::make('website'),
-                TextColumn::make('no_telp')
+                TextColumn::make('jenis_mitra')->searchable(),
+                TextColumn::make('email')->searchable()->toggleable(),
+                TextColumn::make('website')->searchable()->toggleable(),
+                TextColumn::make('no_telp')->searchable()->toggleable(),
             ])
             ->filters([
-                //
+                SelectFilter::make('jenis_mitra')
+                ->options([
+                'TKJP'=>'TKJP',
+                'Konsultan'=>'Konsultan',
+                'Audit'=>'Audit',
+                ])
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

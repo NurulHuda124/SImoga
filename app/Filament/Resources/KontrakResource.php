@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Widgets\StatsOverviewWidget;
 
 class KontrakResource extends Resource
@@ -46,11 +47,11 @@ class KontrakResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('nama_pegawai'),
-                TextColumn::make('email'),
-                TextColumn::make('tanggal_kontrak_awal')->date(),
-                TextColumn::make('tanggal_kontrak_akhir')->date(),
-                BadgeColumn::make('status_kontrak')
+                TextColumn::make('nama_pegawai')->searchable(),
+                TextColumn::make('email')->searchable()->toggleable(),
+                TextColumn::make('tanggal_kontrak_awal')->date()->searchable()->toggleable(),
+                TextColumn::make('tanggal_kontrak_akhir')->date()->searchable()->toggleable(),
+                BadgeColumn::make('status_kontrak')->searchable()
                 ->colors([
                 'primary',
                 'success' => 'Berlaku',
@@ -58,7 +59,11 @@ class KontrakResource extends Resource
                 ]),
             ])
             ->filters([
-                //
+                SelectFilter::make('status_kontrak')
+                ->options([
+                'Berlaku'=>'Berlaku',
+                'Tidak Berlaku'=>'Tidak Berlaku',
+                ])
             ])
             ->actions([
                 // Tables\Actions\ViewAction::make(),
