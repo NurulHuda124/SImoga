@@ -36,8 +36,6 @@ class UserResource extends Resource
                 TextInput::make('email')->required()->label('Email Address'),
                 TextInput::make('password')->password()
                 ->minLength(8)
-                ->required(fn(Page $livewire):bool => $livewire instanceof CreateRecord)
-                ->dehydrated(fn($state)=> Hash::make($state)),
                 ])
             ]);
     }
@@ -48,7 +46,7 @@ class UserResource extends Resource
             ->columns([
                 TextColumn::make('name'),
                 TextColumn::make('email'),
-                TextColumn::make('password'),
+                // TextColumn::make('password'),
             ])
             ->filters([
                 //
@@ -60,14 +58,14 @@ class UserResource extends Resource
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
-    
+
     public static function getRelations(): array
     {
         return [
             //
         ];
     }
-    
+
     public static function getPages(): array
     {
         return [
@@ -75,5 +73,5 @@ class UserResource extends Resource
             'create' => Pages\CreateUser::route('/create'),
             'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
-    }    
+    }
 }

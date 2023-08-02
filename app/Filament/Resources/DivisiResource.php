@@ -41,7 +41,7 @@ class DivisiResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('divisi')
+                TextColumn::make('divisi')->searchable()
             ])
             ->filters([
                 //
