@@ -19,7 +19,8 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\BadgeColumn;
+use Filament\Widgets\StatsOverviewWidget;
 
 class PensiunResource extends Resource
 {
@@ -52,15 +53,12 @@ class PensiunResource extends Resource
                 TextColumn::make('nama_pegawai'),
                 TextColumn::make('email'),
                 TextColumn::make('tanggal_lahir')->date(),
-                IconColumn::make('status_pensiun')
-                ->options([
-                'heroicon-o-x-circle' => fn ($state): bool => $state === 54,
-                'heroicon-o-check-circle',
-                ])
+                BadgeColumn::make('status_pensiun')
                 ->colors([
-                'danger' => fn ($state): bool => $state === 54,
-                'success',
-                ])->size('xl'),
+                'primary',
+                'success' => 'Aktif',
+                'danger' => 'Pensiun',
+                ]),
             ])
             ->filters([
                 //
@@ -90,4 +88,11 @@ class PensiunResource extends Resource
             // 'edit' => Pages\EditPensiun::route('/{record}/edit'),
         ];
     }    
+
+    public static function getWidgets(): array
+    {
+        return [
+            StatsOverviewWidget::class
+        ];
+    }
 }
