@@ -33,7 +33,7 @@ class JabatanResource extends Resource
             ->schema([
             Card::make()
             ->schema([
-            TextInput::make('jabatan')
+            TextInput::make('jabatan')->required()
             ])
             ]);
     }
