@@ -3,24 +3,18 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\PensiunResource\Pages;
-use App\Filament\Resources\PegawaiResource\Pages\ViewPegawai;
-use App\Filament\Resources\PensiunResource\RelationManagers;
 use App\Models\Pensiun;
-use Filament\Forms;
+use DateTime;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\Card;
-use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\BadgeColumn;
-use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Filters\Filter;
 use Filament\Widgets\StatsOverviewWidget;
 
 class PensiunResource extends Resource
@@ -37,13 +31,7 @@ class PensiunResource extends Resource
     {
         return $form
             ->schema([
-                 Card::make()
-                ->schema([
-                TextInput::make('nama_pegawai')->required(),
-                TextInput::make('email')->required(),
-                DatePicker::make('tanggal_lahir')->format('Y-m-d')->required(),
-                TextInput::make('status_pensiun')->required(),
-                ])
+                // 
             ]);
     }
 
@@ -54,19 +42,40 @@ class PensiunResource extends Resource
                 TextColumn::make('nama_pegawai')->searchable(),
                 TextColumn::make('email')->searchable()->toggleable(),
                 TextColumn::make('tanggal_lahir')->date()->searchable()->toggleable(),
-                BadgeColumn::make('status_pensiun')->searchable()
-                ->colors([
-                'primary',
-                'success' => 'Aktif',
-                'danger' => 'Pensiun',
-                ]),
+                IconColumn::make('status_pensiun')
+                ->options([
+                'heroicon-o-x-circle' => function ($state) {
+                $tanggalLahir = new DateTime($state);
+                $selisih = $tanggalLahir->diff(new DateTime());
+                return $selisih->y >= 54;
+                },
+                'heroicon-o-check-circle' => function ($state) {
+                $tanggalLahir = new DateTime($state);
+                $selisih = $tanggalLahir->diff(new DateTime());
+                return $selisih->y < 54; } ]) ->colors([
+                    'danger' => function ($state) {
+                    $tanggalLahir = new DateTime($state);
+                    $selisih = $tanggalLahir->diff(new DateTime());
+                    return $selisih->y >= 54;
+                    },
+                    'success' => function ($state) {
+                    $tanggalLahir = new DateTime($state);
+                    $selisih = $tanggalLahir->diff(new DateTime());
+                    return $selisih->y < 54; } ]) ->size('xl')
+,
             ])
             ->filters([
-                SelectFilter::make('status_pensiun')
-                ->options([
-                'Aktif'=>'Aktif',
-                'Pensiun'=>'Pensiun',
+                Filter::make('status_pensiun')
+                ->form([
+                DatePicker::make('tanggal_pensiun'),
                 ])
+                ->query(function (Builder $query, array $data): Builder {
+                return $query
+                ->when(
+                $data['tanggal_pensiun'],
+                fn (Builder $query, $date): Builder => $query->whereDate('status_pensiun', '<', now()->subYears(54)), );
+                })
+                
             ])
             ->actions([
                 // Tables\Actions\ViewAction::make(),

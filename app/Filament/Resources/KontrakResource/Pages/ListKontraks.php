@@ -22,7 +22,7 @@ class ListKontraks extends ListRecords
     }
     protected function getHeaderWidgets(): array
     {
-        $jmlhNonaktif = Kontrak::where('status_kontrak', 'Tidak Berlaku')->count('status_kontrak');
+        $jmlhNonaktif = Kontrak::where('status_kontrak', '<=', date('Y-m-d'))->count();
         Notification::make()
         ->danger()
         ->title('Ada Pegawai dengan Kontrak Tidak Berlaku')

@@ -15,9 +15,7 @@ return new class extends Migration
         CREATE TRIGGER pensiun_trigger AFTER INSERT ON pegawais
         FOR EACH ROW
         INSERT INTO pensiuns (nama_pegawai, email, tanggal_lahir, status_pensiun)
-        VALUES (NEW.nama_pegawai, NEW.email, NEW.tanggal_lahir,
-        CASE
-        WHEN FLOOR(DATEDIFF(CURDATE(), NEW.tanggal_lahir) / 365.25) >= 54 THEN "Pensiun" ELSE "Aktif" END )
+        VALUES (NEW.nama_pegawai, NEW.email, NEW.tanggal_lahir, NEW.tanggal_lahir)
         ');
     }
 

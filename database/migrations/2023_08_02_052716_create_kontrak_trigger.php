@@ -16,9 +16,7 @@ return new class extends Migration
         FOR EACH ROW
         INSERT INTO kontraks (nama_pegawai, email, tanggal_kontrak_awal, tanggal_kontrak_akhir , status_kontrak) 
         VALUES
-        (NEW.nama_pegawai, NEW.email, NEW.tanggal_kontrak_awal, NEW.tanggal_kontrak_akhir, 
-        CASE WHEN
-        FLOOR(DATEDIFF(CURDATE(), NEW.tanggal_kontrak_akhir) / 365.25) < 0 THEN "Berlaku" ELSE "Tidak Berlaku" END )
+        (NEW.nama_pegawai, NEW.email, NEW.tanggal_kontrak_awal, NEW.tanggal_kontrak_akhir, NEW.tanggal_kontrak_akhir)
         ');
     }
 

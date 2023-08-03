@@ -3,19 +3,17 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\KontrakResource\Pages;
-use App\Filament\Resources\PegawaiResource\Pages\ViewPegawai;
 use App\Models\Kontrak;
-use App\Models\Pegawai;
-use Filament\Forms;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Filament\Tables\Columns\BadgeColumn;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Filters\SelectFilter;
+use Filament\Forms\Components\DatePicker;
+use Filament\Tables\Filters\Filter;
 use Filament\Widgets\StatsOverviewWidget;
 
 class KontrakResource extends Resource
@@ -32,14 +30,7 @@ class KontrakResource extends Resource
     {
         return $form
             ->schema([
-                // Card::make()
-                // ->schema([
-                // TextInput::make('nama_pegawai')->required(),
-                // TextInput::make('email')->required(),
-                // DatePicker::make('tanggal_kontrak_awal')->format('Y-m-d')->required(),
-                // DatePicker::make('tanggal_kontrak_akhir')->format('Y-m-d')->required(),
-                // TextInput::make('status_kontrak')->required(),
-                // ])
+                // 
             ]);
     }
 
@@ -51,20 +42,27 @@ class KontrakResource extends Resource
                 TextColumn::make('email')->searchable()->toggleable(),
                 TextColumn::make('tanggal_kontrak_awal')->date()->searchable()->toggleable(),
                 TextColumn::make('tanggal_kontrak_akhir')->date()->searchable()->toggleable(),
-                BadgeColumn::make('status_kontrak')->searchable()
+                IconColumn::make('status_kontrak')
+                ->options([
+                'heroicon-o-x-circle',
+                'heroicon-o-check-circle' => fn ($state): bool => $state > date('Y-m-d'),
+                ])
                 ->colors([
-                'primary',
-                'success' => 'Berlaku',
-                'danger' => 'Tidak Berlaku',
-                ]),
+                'danger',
+                'success' => fn ($state): bool => $state > date('Y-m-d'),
+                ])->size('xl'),
             ])
             ->filters([
-                SelectFilter::make('status_kontrak')
-                ->options([
-                'Berlaku'=>'Berlaku',
-                'Tidak Berlaku'=>'Tidak Berlaku',
+                Filter::make('status_kontrak')
+                ->form([
+                DatePicker::make('tanggal_kontrak_akhir'),
                 ])
-            ])
+                ->query(function (Builder $query, array $data): Builder {
+                return $query
+                ->when(
+                $data['tanggal_kontrak_akhir'],
+                fn (Builder $query, $date): Builder => $query->whereDate('status_kontrak', '<=', $date),
+                ); }) ])
             ->actions([
                 // Tables\Actions\ViewAction::make(),
                 // Tables\Actions\EditAction::make(),

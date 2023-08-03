@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('nama_pegawai');
             $table->string('email');
             $table->date('tanggal_lahir');
-            $table->string('status_pensiun');
+            $table->date('status_pensiun');
             $table->timestamps();
         });
     }

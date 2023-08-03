@@ -3,16 +3,16 @@
 namespace App\Filament\Widgets\Dashboard;
 
 use App\Models\Kontrak;
-use Filament\Widgets\BarChartWidget;
+use Filament\Widgets\DoughnutChartWidget;
 
-class PegawaiBarChart extends BarChartWidget
+class PegawaiDoughnutChart extends DoughnutChartWidget
 {
     protected static ?string $heading = 'Jumlah Pegawai Per Masa Kontrak';
     protected static ?int $sort = 2;
     protected function getData(): array
     {
-        $jmlhBerlaku= Kontrak::where('status_kontrak', 'Berlaku')->count('status_kontrak');
-        $jmlhTdkBerlaku = Kontrak::where('status_kontrak', 'Tidak Berlaku')->count('status_kontrak');
+        $jmlhBerlaku = Kontrak::where('status_kontrak', '>', date('Y-m-d'))->count();
+        $jmlhTdkBerlaku = Kontrak::where('status_kontrak', '<=', date('Y-m-d'))->count();
         return [
             'datasets' => [
                 [
