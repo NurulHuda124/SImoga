@@ -20,6 +20,7 @@ class DivisiResource extends Resource
 {
     protected static ?string $model = Divisi::class;
     
+    protected static ?string $recordTitleAttribute = 'divisi';
     protected static ?string $pluralModelLabel = 'Data Divisi';
     protected static ?string $navigationLabel = 'Data Divisi';
     protected static ?string $navigationIcon = 'heroicon-o-server';

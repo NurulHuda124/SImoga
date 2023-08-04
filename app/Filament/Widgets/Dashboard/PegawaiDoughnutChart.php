@@ -20,8 +20,8 @@ class PegawaiDoughnutChart extends DoughnutChartWidget
                     'data' => [$jmlhBerlaku, $jmlhTdkBerlaku],
                     'fill' => 'start',
                     'backgroundColor' => [
-                    'rgba(255, 205, 86, 0.5)',
-                    'rgba(54, 162, 235, 0.5)',
+                    'rgba(255, 205, 86, 0.7)',
+                    'rgba(54, 162, 235, 0.7)',
                     ],
                     'borderColor' => [
                     'rgb(255, 205, 86)',

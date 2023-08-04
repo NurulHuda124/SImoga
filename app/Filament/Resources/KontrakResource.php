@@ -20,6 +20,7 @@ class KontrakResource extends Resource
 {
     protected static ?string $model = Kontrak::class;
 
+    protected static ?string $recordTitleAttribute = 'nama_pegawai';
     protected static ?string $pluralModelLabel = 'Kontrak';
     protected static ?string $navigationLabel = 'Kontrak';
     protected static ?string $navigationIcon = 'heroicon-o-newspaper';
@@ -66,6 +67,10 @@ class KontrakResource extends Resource
             ->actions([
                 // Tables\Actions\ViewAction::make(),
                 // Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('print')
+                ->icon('heroicon-o-printer')->color('success')
+                ->url(fn(Kontrak $record)=>route('downloadkontrak.pdf', $record))
+                ->openUrlInNewTab(),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),

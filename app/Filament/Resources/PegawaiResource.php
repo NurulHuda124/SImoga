@@ -29,6 +29,10 @@ class PegawaiResource extends Resource
 {
     protected static ?string $model = Pegawai::class;
 
+    public static function getGloballySearchableAttributes(): array
+    {
+    return ['nama_pegawai', 'jenis_mitra', 'email', 'jabatan', 'alamat'];
+    }
     protected static ?string $pluralModelLabel = 'Data Pegawai';
     protected static ?string $navigationLabel = 'Data Pegawai';
     protected static ?string $navigationIcon = 'heroicon-o-user-group';

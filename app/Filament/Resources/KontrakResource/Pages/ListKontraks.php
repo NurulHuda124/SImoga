@@ -18,6 +18,8 @@ class ListKontraks extends ListRecords
     {
         return [
             // Actions\CreateAction::make(),
+            // Actions\ButtonAction::make('Laporan pdf')->url(fn()=>route('download.tes'))
+            // ->openUrlInNewTab(),
         ];
     }
     protected function getHeaderWidgets(): array

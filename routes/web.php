@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PDFController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,6 +18,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
-
+Route::get('downloadpensiun/{id}', [PDFController::class, 'pensiunpdf'])->name('downloadpensiun.pdf');
+Route::get('download/{id}', [PDFController::class,'kontrakpdf'])->name('downloadkontrak.pdf');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

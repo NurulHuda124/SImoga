@@ -20,6 +20,7 @@ class JabatanResource extends Resource
 {
     protected static ?string $model = Jabatan::class; 
 
+    protected static ?string $recordTitleAttribute = 'jabatan';
     protected static ?string $pluralModelLabel = 'Data Jabatan';
     protected static ?string $navigationLabel = 'Data Jabatan';
     protected static ?string $navigationIcon = 'heroicon-o-briefcase';

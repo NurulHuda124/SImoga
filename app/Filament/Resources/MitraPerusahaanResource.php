@@ -22,6 +22,10 @@ class MitraPerusahaanResource extends Resource
 {
     protected static ?string $model = MitraPerusahaan::class;
 
+    public static function getGloballySearchableAttributes(): array
+    {
+    return ['nama_perusahaan', 'jenis_mitra', 'email', 'website', 'no_telp'];
+    }
     protected static ?string $pluralModelLabel = 'Mitra Perusahaan';
     protected static ?string $navigationLabel = 'Mitra Perusahaan';
     protected static ?string $navigationIcon = 'heroicon-o-presentation-chart-line';

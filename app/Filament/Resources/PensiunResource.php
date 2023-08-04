@@ -21,6 +21,7 @@ class PensiunResource extends Resource
 {
     protected static ?string $model = Pensiun::class;
 
+    protected static ?string $recordTitleAttribute = 'nama_pegawai';
     protected static ?string $pluralModelLabel= 'Pensiun';
     protected static ?string $navigationLabel = 'Pensiun';
     protected static ?string $navigationIcon = 'heroicon-o-calendar';
@@ -80,6 +81,10 @@ class PensiunResource extends Resource
             ->actions([
                 // Tables\Actions\ViewAction::make(),
                 // Tables\Actions\EditAction::make(),
+               Tables\Actions\Action::make('print')
+               ->icon('heroicon-o-printer')->color('success')
+               ->url(fn(Pensiun $record) => route('downloadpensiun.pdf', ['id' => $record->id]))
+               ->openUrlInNewTab(),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
