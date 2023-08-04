@@ -15,7 +15,7 @@ return new class extends Migration
        CREATE TRIGGER delkontrak_trigger AFTER DELETE ON pegawais
        FOR EACH ROW
        BEGIN
-       DELETE FROM kontraks WHERE kontraks.nama_pegawai = OLD.nama_pegawai;
+       DELETE FROM kontraks WHERE kontraks.id = OLD.id;
        END;
        ');
     }

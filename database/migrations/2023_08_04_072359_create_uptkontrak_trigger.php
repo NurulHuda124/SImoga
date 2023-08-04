@@ -22,7 +22,7 @@ return new class extends Migration
         tanggal_kontrak_awal = NEW.tanggal_kontrak_awal,
         tanggal_kontrak_akhir = NEW.tanggal_kontrak_akhir,
         status_kontrak = NEW.tanggal_kontrak_akhir
-        WHERE kontraks.nama_pegawai = NEW.nama_pegawai;
+        WHERE kontraks.id = NEW.id;
         END;
         ');
     }
