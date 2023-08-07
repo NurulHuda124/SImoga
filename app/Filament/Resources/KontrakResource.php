@@ -45,13 +45,17 @@ class KontrakResource extends Resource
                 TextColumn::make('tanggal_kontrak_akhir')->date()->searchable()->toggleable(),
                 IconColumn::make('status_kontrak')
                 ->options([
-                'heroicon-o-x-circle',
-                'heroicon-o-check-circle' => fn ($state): bool => $state > date('Y-m-d'),
-                ])
+                    'heroicon-s-check-circle' => fn ($state): bool => $state > date('Y-m-d'),
+                    'heroicon-s-x-circle' => fn ($state): bool => $state <= date('Y-m-d'), 
+                    'heroicon-s-exclamation-circle'=> fn ($state): bool => 
+                    $state > date('Y-m-d') && $state <= date('Y-m-d', strtotime('+1 month')), ])
                 ->colors([
-                'danger',
-                'success' => fn ($state): bool => $state > date('Y-m-d'),
-                ])->size('xl'),
+                    'success' => fn ($state): bool => $state > date('Y-m-d'),
+                    'danger' => fn ($state): bool => $state <= date('Y-m-d'),
+                    'primary' => fn ($state): bool =>
+                    $state > date('Y-m-d') && $state <= date('Y-m-d', strtotime('+1 month')),
+                    ])
+                ->size('xl'),
             ])
             ->filters([
                 Filter::make('status_kontrak')
@@ -68,7 +72,7 @@ class KontrakResource extends Resource
                 // Tables\Actions\ViewAction::make(),
                 // Tables\Actions\EditAction::make(),
                 Tables\Actions\Action::make('print')
-                ->icon('heroicon-o-printer')->color('success')
+                ->icon('heroicon-s-printer')->color('success')
                 ->url(fn(Kontrak $record)=>route('downloadkontrak.pdf', $record))
                 ->openUrlInNewTab(),
             ])
