@@ -64,6 +64,7 @@ class PegawaiResource extends Resource
                 'nama_perusahaan');}),
                 DatePicker::make('tanggal_kontrak_awal')->format('Y-m-d')->required(),
                 DatePicker::make('tanggal_kontrak_akhir')->format('Y-m-d')->required(),
+                
                 ])
             ]);
     }
