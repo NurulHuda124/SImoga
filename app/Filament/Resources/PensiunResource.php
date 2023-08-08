@@ -65,7 +65,6 @@ class PensiunResource extends Resource
                         // Hitung selisih tanggal pensiun dengan tanggal sebulan ke depan
                         $selisih = $sebulanKemudian->diff($tanggalPensiun);
                         return $selisih->m == 0 && $sekarang < $sebulanKemudian;
-
                     },
                  ])
                 ->colors([
