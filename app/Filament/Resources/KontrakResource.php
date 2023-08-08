@@ -46,13 +46,7 @@ class KontrakResource extends Resource
                 IconColumn::make('status_kontrak')
                 ->options([
                     'heroicon-s-check-circle' => fn ($state): bool => $state > date('Y-m-d'),
-<<<<<<< HEAD
-                    'heroicon-s-x-circle' => fn ($state): bool => $state <= date('Y-m-d'),
                     'heroicon-s-exclamation-circle'=> fn ($state): bool =>
-=======
-                    'heroicon-s-x-circle' => fn ($state): bool => $state <= date('Y-m-d'), 
-                    'heroicon-s-exclamation-circle'=> fn ($state): bool => 
->>>>>>> 6500c6e081aef56117b73afefaef790f9348d2ce
                     $state > date('Y-m-d') && $state <= date('Y-m-d', strtotime('+1 month')), ])
                 ->colors([
                     'success' => fn ($state): bool => $state > date('Y-m-d'),
