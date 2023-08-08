@@ -27,6 +27,12 @@ class PensiunResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-calendar';
     protected static ?string $navigationGroup = 'MANAJEMEN MASA KERJA PEGAWAI';
     protected static ?int $navigationSort = 2;
+    protected static function getNavigationBadge(): ?string
+    {
+    return static::getModel()::where(function ($query) {
+    $query->whereDate('status_pensiun', '<=', now()->subYears(54));
+        })->count();
+        }
 
     public static function form(Form $form): Form
     {
@@ -113,7 +119,7 @@ class PensiunResource extends Resource
                 // Tables\Actions\ViewAction::make(),
                 // Tables\Actions\EditAction::make(),
                Tables\Actions\Action::make('print')
-               ->icon('heroicon-s-printer')->color('success')
+               ->icon('heroicon-s-printer')
                ->url(fn(Pensiun $record) => route('downloadpensiun.pdf', ['id' => $record->id]))
                ->openUrlInNewTab(),
             ])
