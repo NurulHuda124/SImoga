@@ -26,6 +26,10 @@ class KontrakResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-newspaper';
     protected static ?string $navigationGroup = 'MANAJEMEN MASA KERJA PEGAWAI';
     protected static ?int $navigationSort = 2;
+    protected static function getNavigationBadge(): ?string
+    {
+    return static::getModel()::where('status_kontrak', '<=', date('Y-m-d'))->count();
+    }
 
     public static function form(Form $form): Form
     {
@@ -52,7 +56,7 @@ class KontrakResource extends Resource
                 ->colors([
                     'success' => fn ($state): bool => $state > date('Y-m-d'),
                     'danger' => fn ($state): bool => $state <= date('Y-m-d'),
-                    'primary' => fn ($state): bool =>
+                    'warning' => fn ($state): bool =>
                     $state > date('Y-m-d') && $state <= date('Y-m-d', strtotime('+1 month')),
                     ])
                 ->size('xl'),
@@ -72,7 +76,7 @@ class KontrakResource extends Resource
                 // Tables\Actions\ViewAction::make(),
                 // Tables\Actions\EditAction::make(),
                 Tables\Actions\Action::make('print')
-                ->icon('heroicon-s-printer')->color('success')
+                ->icon('heroicon-s-printer')
                 ->url(fn(Kontrak $record)=>route('downloadkontrak.pdf', $record))
                 ->openUrlInNewTab(),
             ])

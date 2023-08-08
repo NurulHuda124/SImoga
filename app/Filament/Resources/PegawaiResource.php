@@ -64,6 +64,7 @@ class PegawaiResource extends Resource
                 'nama_perusahaan');}),
                 DatePicker::make('tanggal_kontrak_awal')->format('Y-m-d')->required(),
                 DatePicker::make('tanggal_kontrak_akhir')->format('Y-m-d')->required(),
+                
                 ])
             ]);
     }
@@ -72,8 +73,7 @@ class PegawaiResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('nama_pegawai')
-                ->searchable(),
+                TextColumn::make('nama_pegawai')->searchable(),
                 TextColumn::make('email')->searchable()->toggleable(),
                 TextColumn::make('tempat_lahir')->searchable()->toggleable(),
                 TextColumn::make('tanggal_lahir')->date()->searchable()->toggleable(),
@@ -106,7 +106,7 @@ class PegawaiResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            // 
         ];
     }
 
@@ -126,5 +126,5 @@ class PegawaiResource extends Resource
             StatsOverviewWidget::class
         ];
     }
-
+    
 }
