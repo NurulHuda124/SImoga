@@ -27,12 +27,18 @@ class PensiunResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-calendar';
     protected static ?string $navigationGroup = 'MANAJEMEN MASA KERJA PEGAWAI';
     protected static ?int $navigationSort = 2;
+    protected static function getNavigationBadge(): ?string
+    {
+    return static::getModel()::where(function ($query) {
+    $query->whereDate('status_pensiun', '<=', now()->subYears(54));
+        })->count();
+        }
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                //
+                // 
             ]);
     }
 
@@ -53,13 +59,8 @@ class PensiunResource extends Resource
                     'heroicon-s-check-circle' => function ($state) {
                         $tanggalLahir = new DateTime($state);
                         $selisih = $tanggalLahir->diff(new DateTime());
-<<<<<<< HEAD
-                        return $selisih->y < 54;
-                    },
-=======
                         return $selisih->y < 54; 
                     }, 
->>>>>>> 6500c6e081aef56117b73afefaef790f9348d2ce
                     'heroicon-s-exclamation-circle' => function ($state) {
                         $tanggalLahir = new DateTime($state);
                         $tanggalPensiun = $tanggalLahir->modify('+54 years');
@@ -69,11 +70,7 @@ class PensiunResource extends Resource
                         $sebulanKemudian->modify('+1 month');
                         // Hitung selisih tanggal pensiun dengan tanggal sebulan ke depan
                         $selisih = $sebulanKemudian->diff($tanggalPensiun);
-<<<<<<< HEAD
-                        return $selisih->m == 0 && $sekarang < $sebulanKemudian;
-=======
                         return $selisih->m == 0 && $sekarang < $sebulanKemudian; 
->>>>>>> 6500c6e081aef56117b73afefaef790f9348d2ce
                     },
                  ])
                 ->colors([
@@ -85,11 +82,7 @@ class PensiunResource extends Resource
                     'success' => function ($state) {
                         $tanggalLahir = new DateTime($state);
                         $selisih = $tanggalLahir->diff(new DateTime());
-<<<<<<< HEAD
-                        return $selisih->y < 54;
-=======
                         return $selisih->y < 54; 
->>>>>>> 6500c6e081aef56117b73afefaef790f9348d2ce
                     } ,
                     'warning' => function ($state) {
                         $tanggalLahir = new DateTime($state);
@@ -103,11 +96,7 @@ class PensiunResource extends Resource
                         // Hitung selisih tanggal pensiun dengan tanggal sebulan ke depan
                         $selisih = $sebulanKemudian->diff($tanggalPensiun);
 
-<<<<<<< HEAD
-                        return $selisih->m == 0 && $sekarang < $sebulanKemudian;
-=======
                         return $selisih->m == 0 && $sekarang < $sebulanKemudian; 
->>>>>>> 6500c6e081aef56117b73afefaef790f9348d2ce
                     }
                 ])
                 ->size('xl')
@@ -124,13 +113,13 @@ class PensiunResource extends Resource
                 $data['tanggal_pensiun'],
                 fn (Builder $query, $date): Builder => $query->whereDate('status_pensiun', '<', now()->subYears(54)), );
                 })
-
+                
             ])
             ->actions([
                 // Tables\Actions\ViewAction::make(),
                 // Tables\Actions\EditAction::make(),
                Tables\Actions\Action::make('print')
-               ->icon('heroicon-s-printer')->color('success')
+               ->icon('heroicon-s-printer')
                ->url(fn(Pensiun $record) => route('downloadpensiun.pdf', ['id' => $record->id]))
                ->openUrlInNewTab(),
             ])
@@ -138,14 +127,14 @@ class PensiunResource extends Resource
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
-
+    
     public static function getRelations(): array
     {
         return [
             //
         ];
     }
-
+    
     public static function getPages(): array
     {
         return [
@@ -154,7 +143,7 @@ class PensiunResource extends Resource
             'view' => PegawaiResource\Pages\ViewPegawai::route('/{record}'),
             // 'edit' => Pages\EditPensiun::route('/{record}/edit'),
         ];
-    }
+    }    
 
     public static function getWidgets(): array
     {

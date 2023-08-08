@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Filament\Facades\Filament;
+use Illuminate\Foundation\Vite;
+use Illuminate\Support\ServiceProvider;
 
 class FilamentServiceProvider extends ServiceProvider
 {
@@ -14,7 +16,7 @@ class FilamentServiceProvider extends ServiceProvider
 
         // Using Laravel Mix
         Filament::registerTheme(
-        mix('css/filament.css'),
+        app(Vite::class)('resources/css/filament.css'),
         );
         });
 

@@ -26,12 +26,16 @@ class KontrakResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-newspaper';
     protected static ?string $navigationGroup = 'MANAJEMEN MASA KERJA PEGAWAI';
     protected static ?int $navigationSort = 2;
+    protected static function getNavigationBadge(): ?string
+    {
+    return static::getModel()::where('status_kontrak', '<=', date('Y-m-d'))->count();
+    }
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                //
+                // 
             ]);
     }
 
@@ -46,18 +50,13 @@ class KontrakResource extends Resource
                 IconColumn::make('status_kontrak')
                 ->options([
                     'heroicon-s-check-circle' => fn ($state): bool => $state > date('Y-m-d'),
-<<<<<<< HEAD
-                    'heroicon-s-x-circle' => fn ($state): bool => $state <= date('Y-m-d'),
-                    'heroicon-s-exclamation-circle'=> fn ($state): bool =>
-=======
                     'heroicon-s-x-circle' => fn ($state): bool => $state <= date('Y-m-d'), 
                     'heroicon-s-exclamation-circle'=> fn ($state): bool => 
->>>>>>> 6500c6e081aef56117b73afefaef790f9348d2ce
                     $state > date('Y-m-d') && $state <= date('Y-m-d', strtotime('+1 month')), ])
                 ->colors([
                     'success' => fn ($state): bool => $state > date('Y-m-d'),
                     'danger' => fn ($state): bool => $state <= date('Y-m-d'),
-                    'primary' => fn ($state): bool =>
+                    'warning' => fn ($state): bool =>
                     $state > date('Y-m-d') && $state <= date('Y-m-d', strtotime('+1 month')),
                     ])
                 ->size('xl'),
@@ -77,7 +76,7 @@ class KontrakResource extends Resource
                 // Tables\Actions\ViewAction::make(),
                 // Tables\Actions\EditAction::make(),
                 Tables\Actions\Action::make('print')
-                ->icon('heroicon-s-printer')->color('success')
+                ->icon('heroicon-s-printer')
                 ->url(fn(Kontrak $record)=>route('downloadkontrak.pdf', $record))
                 ->openUrlInNewTab(),
             ])
@@ -85,14 +84,14 @@ class KontrakResource extends Resource
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
-
+    
     public static function getRelations(): array
     {
         return [
-            //
+            // 
         ];
     }
-
+    
     public static function getPages(): array
     {
         return [
@@ -101,8 +100,8 @@ class KontrakResource extends Resource
             'view' => PegawaiResource\Pages\ViewPegawai::route('/{record}'),
             // 'edit' => Pages\EditKontrak::route('/{record}/edit'),
         ];
-    }
-
+    }  
+    
     public static function getWidgets(): array
     {
         return [
