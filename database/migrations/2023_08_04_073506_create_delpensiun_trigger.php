@@ -15,7 +15,7 @@ return new class extends Migration
        CREATE TRIGGER delpensiun_trigger AFTER DELETE ON pegawais
        FOR EACH ROW
        BEGIN
-       DELETE FROM pensiuns WHERE pensiuns.id = OLD.id;
+       DELETE FROM pensiuns WHERE pensiuns.nama_pegawai = OLD.nama_pegawai;
        END;
        ');
     }
