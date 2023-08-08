@@ -53,8 +53,13 @@ class PensiunResource extends Resource
                     'heroicon-s-check-circle' => function ($state) {
                         $tanggalLahir = new DateTime($state);
                         $selisih = $tanggalLahir->diff(new DateTime());
+<<<<<<< HEAD
                         return $selisih->y < 54;
                     },
+=======
+                        return $selisih->y < 54; 
+                    }, 
+>>>>>>> 6500c6e081aef56117b73afefaef790f9348d2ce
                     'heroicon-s-exclamation-circle' => function ($state) {
                         $tanggalLahir = new DateTime($state);
                         $tanggalPensiun = $tanggalLahir->modify('+54 years');
@@ -64,7 +69,11 @@ class PensiunResource extends Resource
                         $sebulanKemudian->modify('+1 month');
                         // Hitung selisih tanggal pensiun dengan tanggal sebulan ke depan
                         $selisih = $sebulanKemudian->diff($tanggalPensiun);
+<<<<<<< HEAD
                         return $selisih->m == 0 && $sekarang < $sebulanKemudian;
+=======
+                        return $selisih->m == 0 && $sekarang < $sebulanKemudian; 
+>>>>>>> 6500c6e081aef56117b73afefaef790f9348d2ce
                     },
                  ])
                 ->colors([
@@ -76,7 +85,11 @@ class PensiunResource extends Resource
                     'success' => function ($state) {
                         $tanggalLahir = new DateTime($state);
                         $selisih = $tanggalLahir->diff(new DateTime());
+<<<<<<< HEAD
                         return $selisih->y < 54;
+=======
+                        return $selisih->y < 54; 
+>>>>>>> 6500c6e081aef56117b73afefaef790f9348d2ce
                     } ,
                     'warning' => function ($state) {
                         $tanggalLahir = new DateTime($state);
@@ -90,7 +103,11 @@ class PensiunResource extends Resource
                         // Hitung selisih tanggal pensiun dengan tanggal sebulan ke depan
                         $selisih = $sebulanKemudian->diff($tanggalPensiun);
 
+<<<<<<< HEAD
                         return $selisih->m == 0 && $sekarang < $sebulanKemudian;
+=======
+                        return $selisih->m == 0 && $sekarang < $sebulanKemudian; 
+>>>>>>> 6500c6e081aef56117b73afefaef790f9348d2ce
                     }
                 ])
                 ->size('xl')
