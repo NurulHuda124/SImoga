@@ -32,7 +32,7 @@ class PensiunResource extends Resource
     {
         return $form
             ->schema([
-                // 
+                //
             ]);
     }
 
@@ -45,24 +45,55 @@ class PensiunResource extends Resource
                 TextColumn::make('tanggal_lahir')->date()->searchable()->toggleable(),
                 IconColumn::make('status_pensiun')
                 ->options([
-                'heroicon-o-x-circle' => function ($state) {
-                $tanggalLahir = new DateTime($state);
-                $selisih = $tanggalLahir->diff(new DateTime());
-                return $selisih->y >= 54;
-                },
-                'heroicon-o-check-circle' => function ($state) {
-                $tanggalLahir = new DateTime($state);
-                $selisih = $tanggalLahir->diff(new DateTime());
-                return $selisih->y < 54; } ]) ->colors([
+                    'heroicon-s-x-circle' => function ($state) {
+                        $tanggalLahir = new DateTime($state);
+                        $selisih = $tanggalLahir->diff(new DateTime());
+                        return $selisih->y >= 54;
+                    },
+                    'heroicon-s-check-circle' => function ($state) {
+                        $tanggalLahir = new DateTime($state);
+                        $selisih = $tanggalLahir->diff(new DateTime());
+                        return $selisih->y < 54;
+                    },
+                    'heroicon-s-exclamation-circle' => function ($state) {
+                        $tanggalLahir = new DateTime($state);
+                        $tanggalPensiun = $tanggalLahir->modify('+54 years');
+                        $sekarang = new DateTime();
+                        // Hitung tanggal sebulan ke depan dari sekarang
+                        $sebulanKemudian = new DateTime();
+                        $sebulanKemudian->modify('+1 month');
+                        // Hitung selisih tanggal pensiun dengan tanggal sebulan ke depan
+                        $selisih = $sebulanKemudian->diff($tanggalPensiun);
+                        return $selisih->m == 0 && $sekarang < $sebulanKemudian;
+                    },
+                 ])
+                ->colors([
                     'danger' => function ($state) {
-                    $tanggalLahir = new DateTime($state);
-                    $selisih = $tanggalLahir->diff(new DateTime());
-                    return $selisih->y >= 54;
+                        $tanggalLahir = new DateTime($state);
+                        $selisih = $tanggalLahir->diff(new DateTime());
+                        return $selisih->y >= 54;
                     },
                     'success' => function ($state) {
-                    $tanggalLahir = new DateTime($state);
-                    $selisih = $tanggalLahir->diff(new DateTime());
-                    return $selisih->y < 54; } ]) ->size('xl')
+                        $tanggalLahir = new DateTime($state);
+                        $selisih = $tanggalLahir->diff(new DateTime());
+                        return $selisih->y < 54;
+                    } ,
+                    'warning' => function ($state) {
+                        $tanggalLahir = new DateTime($state);
+                        $tanggalPensiun = $tanggalLahir->modify('+54 years');
+                        $sekarang = new DateTime();
+
+                        // Hitung tanggal sebulan ke depan dari sekarang
+                        $sebulanKemudian = new DateTime();
+                        $sebulanKemudian->modify('+1 month');
+
+                        // Hitung selisih tanggal pensiun dengan tanggal sebulan ke depan
+                        $selisih = $sebulanKemudian->diff($tanggalPensiun);
+
+                        return $selisih->m == 0 && $sekarang < $sebulanKemudian;
+                    }
+                ])
+                ->size('xl')
 ,
             ])
             ->filters([
@@ -76,13 +107,13 @@ class PensiunResource extends Resource
                 $data['tanggal_pensiun'],
                 fn (Builder $query, $date): Builder => $query->whereDate('status_pensiun', '<', now()->subYears(54)), );
                 })
-                
+
             ])
             ->actions([
                 // Tables\Actions\ViewAction::make(),
                 // Tables\Actions\EditAction::make(),
                Tables\Actions\Action::make('print')
-               ->icon('heroicon-o-printer')->color('success')
+               ->icon('heroicon-s-printer')->color('success')
                ->url(fn(Pensiun $record) => route('downloadpensiun.pdf', ['id' => $record->id]))
                ->openUrlInNewTab(),
             ])
@@ -90,14 +121,14 @@ class PensiunResource extends Resource
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
-    
+
     public static function getRelations(): array
     {
         return [
             //
         ];
     }
-    
+
     public static function getPages(): array
     {
         return [
@@ -106,7 +137,7 @@ class PensiunResource extends Resource
             'view' => PegawaiResource\Pages\ViewPegawai::route('/{record}'),
             // 'edit' => Pages\EditPensiun::route('/{record}/edit'),
         ];
-    }    
+    }
 
     public static function getWidgets(): array
     {
