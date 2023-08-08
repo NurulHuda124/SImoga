@@ -21,7 +21,7 @@ return new class extends Migration
         email = NEW.email,
         tanggal_lahir = NEW.tanggal_lahir,
         status_pensiun= NEW.tanggal_lahir
-        WHERE pensiuns.id = NEW.id;
+        WHERE pensiuns.nama_pegawai = NEW.nama_pegawai;
         END;
         ');
     }
