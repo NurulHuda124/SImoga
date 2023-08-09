@@ -4,6 +4,7 @@ namespace App\Filament\Resources\KontrakResource\Widgets;
 
 use App\Models\Kontrak;
 use Filament\Forms\Components\Actions\Modal\Actions\Action;
+use Filament\Notifications\Events\DatabaseNotificationsSent;
 use Filament\Notifications\Notification;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Card;
@@ -27,12 +28,14 @@ class StatsOverview extends BaseWidget
         ->title('**Kontrak Hampir Tidak Berlaku!**')
         ->body('Jumlah Pegawai Kontrak Hampir Tidak Berlaku : ' . $jmlhHabisKontrak)
         ->warning()
-        ->sendToDatabase($recipient);
+        ->seconds(3)
+        ->send();
         Notification::make()
             ->title('**Kontrak Tidak Berlaku!**')
             ->body('Jumlah Pegawai Kontrak Tidak Berlaku : ' . $jmlhNonaktif)
             ->danger()
-            ->sendToDatabase($recipient);
+            ->seconds(3)
+            ->send();
         return [
             Card::make('Jumlah Pegawai Kontrak Berlaku', $jmlhAktif)->chart([7, 2, 10, 3, 15, 4, 17]),
             Card::make('Jumlah Pegawai Kontrak Tidak Berlaku', $jmlhNonaktif)->chart([

@@ -29,12 +29,14 @@ class StatsOverview extends BaseWidget
             ->title('**Hampir Pensiun!**')
             ->body('Jumlah Pegawai Hampir Pensiun : ' . $jmlhHPensiun)
             ->warning()
-            ->sendToDatabase($recipient);
+            ->seconds(3)
+            ->send();
         Notification::make()
             ->title('**Pensiun!**')
             ->body('Jumlah Pegawai Pensiun : ' . $jmlhPensiun)
             ->danger()
-            ->sendToDatabase($recipient);
+            ->seconds(3)
+            ->send();
         return [
             Card::make('Jumlah Pegawai Belum Pensiun', $jmlhAktif)->chart([7, 2, 10, 3, 15, 4, 17]),
             Card::make('Jumlah Pegawai Pensiun', $jmlhPensiun)->chart([17, 4, 15, 3, 10, 2, 7]),
