@@ -3,10 +3,10 @@
 namespace App\Filament\Resources\MitraPerusahaanResource\Widgets;
 
 use App\Models\MitraPerusahaan;
-use Filament\Widgets\Widget;
+use Carbon\Carbon;
+use Filament\Notifications\Notification;
 use Filament\Widgets\StatsOverviewWidget\Card;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
-
 
 class StatsOverview extends BaseWidget
 {
@@ -14,13 +14,17 @@ class StatsOverview extends BaseWidget
 
     protected function getCards(): array
     {
-    $jmlhMitra = MitraPerusahaan::distinct('nama_perusahaan')->count('nama_perusahaan');
-    return [
+        $jmlhMitra = MitraPerusahaan::distinct('nama_perusahaan')->count('nama_perusahaan');
+        $jmlhAktif = MitraPerusahaan::where('status_kontrak_perusahaan', '>', date('Y-m-d'))->count();
+        $jmlhNonaktif = MitraPerusahaan::where('status_kontrak_perusahaan', '<=', date('Y-m-d'))->count();
+        return [
 
-    Card::make('Jumlah Mitra', $jmlhMitra)
-    ->description('Mitra Perusahaan')
-    ->descriptionIcon('heroicon-o-presentation-chart-line')
-    ->color('primary'),
-    ];
+            Card::make('Jumlah Mitra', $jmlhMitra)
+                ->description('Mitra Perusahaan')
+                ->descriptionIcon('heroicon-o-presentation-chart-line')
+                ->color('primary'),
+            Card::make('Jumlah Perusahaan Kontrak Berlaku', $jmlhAktif),
+            Card::make('Jumlah Perusahaan Kontrak Tidak Berlaku', $jmlhNonaktif)
+        ];
     }
 }

@@ -17,12 +17,16 @@ return new class extends Migration
         BEGIN
         UPDATE kontraks
         SET
-        nama_pegawai = NEW.nama_pegawai,
+        no_induk_karyawan = NEW.no_induk_karyawan,
+        nama_karyawan = NEW.nama_karyawan,
         email = NEW.email,
+        tanggal_lahir = NEW.tanggal_lahir,
+        no_kontrak_perusahaan = NEW.no_kontrak_perusahaan,
         tanggal_kontrak_awal = NEW.tanggal_kontrak_awal,
         tanggal_kontrak_akhir = NEW.tanggal_kontrak_akhir,
-        status_kontrak = NEW.tanggal_kontrak_akhir
-        WHERE kontraks.nama_pegawai = NEW.nama_pegawai;
+        status_kontrak = NEW.tanggal_kontrak_akhir,
+        status_pensiun = NEW.tanggal_lahir
+        WHERE kontraks.id = NEW.id;
         END;
         ');
     }

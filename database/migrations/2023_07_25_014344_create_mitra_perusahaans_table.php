@@ -13,11 +13,17 @@ return new class extends Migration
     {
         Schema::create('mitra_perusahaans', function (Blueprint $table) {
             $table->id();
+            $table->string('no_kontrak_perusahaan');
             $table->string('nama_perusahaan');
             $table->string('jenis_mitra');
             $table->string('email');
             $table->string('website');
-            $table->string('no_telp');
+            $table->string('no_telp_1');
+            $table->string('no_telp_2')->nullable();
+            $table->string('no_telp_3')->nullable();
+            $table->date('tanggal_kontrak_awal_perusahaan');
+            $table->date('tanggal_kontrak_akhir_perusahaan');
+            $table->date('status_kontrak_perusahaan');
             $table->timestamps();
         });
     }

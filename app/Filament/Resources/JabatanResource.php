@@ -18,13 +18,13 @@ use Filament\Tables\Columns\TextColumn;
 
 class JabatanResource extends Resource
 {
-    protected static ?string $model = Jabatan::class; 
+    protected static ?string $model = Jabatan::class;
 
     protected static ?string $recordTitleAttribute = 'jabatan';
-    protected static ?string $pluralModelLabel = 'Data Jabatan';
-    protected static ?string $navigationLabel = 'Data Jabatan';
+    protected static ?string $pluralModelLabel = 'Jabatan';
+    protected static ?string $navigationLabel = 'Jabatan';
     protected static ?string $navigationIcon = 'heroicon-o-briefcase';
-    protected static ?string $navigationGroup = 'MANAJEMEN PEGAWAI';
+    protected static ?string $navigationGroup = 'MANAJEMEN KARYAWAN';
     protected static ?int $navigationSort = 2;
 
 
@@ -32,10 +32,10 @@ class JabatanResource extends Resource
     {
         return $form
             ->schema([
-            Card::make()
-            ->schema([
-            TextInput::make('jabatan')->required()
-            ])
+                Card::make()
+                    ->schema([
+                        TextInput::make('jabatan')->required()
+                    ])
             ]);
     }
 
@@ -55,14 +55,14 @@ class JabatanResource extends Resource
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
-    
+
     public static function getRelations(): array
     {
         return [
             //
         ];
     }
-    
+
     public static function getPages(): array
     {
         return [
@@ -70,5 +70,5 @@ class JabatanResource extends Resource
             'create' => Pages\CreateJabatan::route('/create'),
             'edit' => Pages\EditJabatan::route('/{record}/edit'),
         ];
-    }    
+    }
 }

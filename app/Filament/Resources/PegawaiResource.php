@@ -24,6 +24,12 @@ use Filament\Widgets\StatsOverviewWidget;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Closure;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Section;
+use Filament\Tables\Columns\BadgeColumn;
+use Livewire\TemporaryUploadedFile;
+use Filament\Tables\Columns\ImageColumn;
+use Illuminate\Support\Facades\Storage;
 
 class PegawaiResource extends Resource
 {
@@ -31,41 +37,106 @@ class PegawaiResource extends Resource
 
     public static function getGloballySearchableAttributes(): array
     {
-    return ['nama_pegawai', 'jenis_mitra', 'email', 'jabatan', 'alamat'];
+        return ['nama_pegawai', 'jenis_mitra', 'email', 'jabatan', 'alamat'];
     }
-    protected static ?string $pluralModelLabel = 'Data Pegawai';
-    protected static ?string $navigationLabel = 'Data Pegawai';
+    protected static ?string $pluralModelLabel = 'Karyawan';
+    protected static ?string $navigationLabel = 'Karyawan';
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
-    protected static ?string $navigationGroup = 'MANAJEMEN PEGAWAI';
+    protected static ?string $navigationGroup = 'MANAJEMEN KARYAWAN';
     protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Card::make()
-                ->schema([
-                TextInput::make('nama_pegawai')->required(),
-                TextInput::make('email')->required(),
-                TextInput::make('tempat_lahir')->required(),
-                DatePicker::make('tanggal_lahir')->format('Y-m-d')->required(),
-                TextArea::make('alamat')->required(),
-                TextInput::make('no_telp')->required(),
-                Select::make('jabatan')->required()
-                ->options(Jabatan::all()->pluck('jabatan', 'jabatan')),
-                Select::make('divisi')->required()
-                ->options(Divisi::all()->pluck('divisi', 'divisi')),
-                Select::make('jenis_mitra')->required()
-                ->options(MitraPerusahaan::all()->pluck('jenis_mitra', 'jenis_mitra')),
-                Select::make('nama_perusahaan')->required()
-                ->searchable()
-                ->options(function (Closure $get) {
-                return MitraPerusahaan::where('jenis_mitra', $get('jenis_mitra'))->pluck('nama_perusahaan',
-                'nama_perusahaan');}),
-                DatePicker::make('tanggal_kontrak_awal')->format('Y-m-d')->required(),
-                DatePicker::make('tanggal_kontrak_akhir')->format('Y-m-d')->required(),
-                
-                ])
+                Section::make('Identitas Diri')->schema([
+                    TextInput::make('no_induk_karyawan')->required(),
+                    TextInput::make('nama_karyawan')->required(),
+                    TextInput::make('nik')->required()
+                        ->tel()
+                        ->telRegex('/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/'),
+                    TextInput::make('email')->required(),
+                    TextInput::make('tempat_lahir')->required(),
+                    DatePicker::make('tanggal_lahir')->format('Y-m-d')->required(),
+                    Select::make('jabatan')->required()
+                        ->options(Jabatan::all()->pluck('jabatan', 'jabatan')),
+                    Select::make('divisi')->label('Fungsi')->required()
+                        ->options(Divisi::all()->pluck('divisi', 'divisi')),
+                    TextInput::make('no_telp')->required()
+                        ->tel()
+                        ->telRegex('/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/'),
+                    TextArea::make('alamat')->required(),
+                ])->columns(2),
+                Section::make('Unggah Berkas')->schema([
+                    FileUpload::make('file_ktp')
+                        ->image()
+                        ->enableDownload()
+                        ->enableOpen()
+                        ->label('File KTP')
+                        ->getUploadedFileNameForStorageUsing(function (TemporaryUploadedFile $file): string {
+                            return (string) str($file->getClientOriginalName())->prepend('ktp-');
+                        }),
+                    FileUpload::make('file_nda')
+                        ->label('File NDA')
+                        ->enableDownload()
+                        ->enableOpen()
+                        ->acceptedFileTypes(['application/pdf'])
+                        ->getUploadedFileNameForStorageUsing(function (TemporaryUploadedFile $file): string {
+                            return (string) str($file->getClientOriginalName())->prepend('nda-');
+                        }),
+                ]),
+                Section::make('Mitra')->schema([
+                    Select::make('no_kontrak_perusahaan')->required()
+                        ->options(MitraPerusahaan::all()->pluck('no_kontrak_perusahaan', 'no_kontrak_perusahaan')),
+                    Select::make('jenis_mitra')->required()
+                        ->searchable()
+                        ->options(function (Closure $get) {
+                            return MitraPerusahaan::where(
+                                'no_kontrak_perusahaan',
+                                $get('no_kontrak_perusahaan')
+                            )->pluck(
+                                'jenis_mitra',
+                                'jenis_mitra'
+                            );
+                        }),
+                    Select::make('nama_perusahaan')->required()
+                        ->searchable()
+                        ->options(function (Closure $get) {
+                            return MitraPerusahaan::where(
+                                'no_kontrak_perusahaan',
+                                $get('no_kontrak_perusahaan')
+                            )->pluck(
+                                'nama_perusahaan',
+                                'nama_perusahaan'
+                            );
+                        }),
+                    Select::make('tanggal_kontrak_awal_perusahaan')->required()
+                        ->searchable()
+                        ->options(function (Closure $get) {
+                            return MitraPerusahaan::where(
+                                'no_kontrak_perusahaan',
+                                $get('no_kontrak_perusahaan')
+                            )->pluck(
+                                'tanggal_kontrak_awal_perusahaan',
+                                'tanggal_kontrak_awal_perusahaan'
+                            );
+                        }),
+                    Select::make('tanggal_kontrak_akhir_perusahaan')->required()
+                        ->searchable()
+                        ->options(function (Closure $get) {
+                            return MitraPerusahaan::where(
+                                'no_kontrak_perusahaan',
+                                $get('no_kontrak_perusahaan')
+                            )->pluck(
+                                'tanggal_kontrak_akhir_perusahaan',
+                                'tanggal_kontrak_akhir_perusahaan'
+                            );
+                        }),
+                ])->columns(2),
+                Section::make('Masa Kerja')->schema([
+                    DatePicker::make('tanggal_kontrak_awal')->format('Y-m-d')->required(),
+                    DatePicker::make('tanggal_kontrak_akhir')->format('Y-m-d')->required(),
+                ])->columns(2),
             ]);
     }
 
@@ -73,7 +144,18 @@ class PegawaiResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('nama_pegawai')->searchable(),
+                TextColumn::make('no_induk_karyawan')->searchable(),
+                ImageColumn::make('file_ktp')->width(100)->height('auto')
+                    ->label('File KTP')
+                    ->url(fn ($record) => Storage::url($record->file_ktp))
+                    ->openUrlInNewTab(),
+                BadgeColumn::make('file_nda')
+                    ->label('File NDA')
+                    ->limit(20)
+                    ->url(fn ($record) => Storage::url($record->file_nda))
+                    ->openUrlInNewTab(),
+                TextColumn::make('nama_karyawan')->searchable(),
+                TextColumn::make('nik')->searchable(),
                 TextColumn::make('email')->searchable()->toggleable(),
                 TextColumn::make('tempat_lahir')->searchable()->toggleable(),
                 TextColumn::make('tanggal_lahir')->date()->searchable()->toggleable(),
@@ -83,16 +165,19 @@ class PegawaiResource extends Resource
                 TextColumn::make('divisi')->searchable(),
                 TextColumn::make('jenis_mitra')->searchable(),
                 TextColumn::make('nama_perusahaan')->searchable()->toggleable(),
+                TextColumn::make('no_kontrak_perusahaan')->searchable()->toggleable(),
+                TextColumn::make('tanggal_kontrak_awal_perusahaan')->date()->searchable()->toggleable(),
+                TextColumn::make('tanggal_kontrak_akhir_perusahaan')->date()->searchable()->toggleable(),
                 TextColumn::make('tanggal_kontrak_awal')->date()->searchable()->toggleable(),
                 TextColumn::make('tanggal_kontrak_akhir')->date()->searchable()->toggleable(),
             ])
             ->filters([
                 SelectFilter::make('jenis_mitra')
-                ->options([
-                'TKJP'=>'TKJP',
-                'Konsultan'=>'Konsultan',
-                'Audit'=>'Audit',
-                ])
+                    ->options([
+                        'TKJP' => 'TKJP',
+                        'Konsultan' => 'Konsultan',
+                        'Audit' => 'Audit',
+                    ])
             ])
             ->actions([
                 Tables\Actions\ViewAction::make()->color('success'),
@@ -126,5 +211,4 @@ class PegawaiResource extends Resource
             StatsOverviewWidget::class
         ];
     }
-    
 }

@@ -19,12 +19,12 @@ use Filament\Tables\Columns\TextColumn;
 class DivisiResource extends Resource
 {
     protected static ?string $model = Divisi::class;
-    
+
     protected static ?string $recordTitleAttribute = 'divisi';
-    protected static ?string $pluralModelLabel = 'Data Divisi';
-    protected static ?string $navigationLabel = 'Data Divisi';
+    protected static ?string $pluralModelLabel = 'Fungsi';
+    protected static ?string $navigationLabel = 'Fungsi';
     protected static ?string $navigationIcon = 'heroicon-o-server';
-    protected static ?string $navigationGroup = 'MANAJEMEN PEGAWAI';
+    protected static ?string $navigationGroup = 'MANAJEMEN KARYAWAN';
     protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form
@@ -32,9 +32,9 @@ class DivisiResource extends Resource
         return $form
             ->schema([
                 Card::make()
-                ->schema([
-                TextInput::make('divisi')->required()
-            ])
+                    ->schema([
+                        TextInput::make('divisi')->label('Fungsi')->required()
+                    ])
             ]);
     }
 
@@ -54,14 +54,14 @@ class DivisiResource extends Resource
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
-    
+
     public static function getRelations(): array
     {
         return [
             //
         ];
     }
-    
+
     public static function getPages(): array
     {
         return [
@@ -69,5 +69,5 @@ class DivisiResource extends Resource
             'create' => Pages\CreateDivisi::route('/create'),
             'edit' => Pages\EditDivisi::route('/{record}/edit'),
         ];
-    }    
+    }
 }

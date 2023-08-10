@@ -13,9 +13,7 @@ class ListDivisis extends ListRecords
     protected function getActions(): array
     {
         return [
-            Actions\CreateAction::make()->label('Tambah Divisi'),
+            Actions\CreateAction::make()->label('Tambah Fungsi'),
         ];
     }
-
-    
 }

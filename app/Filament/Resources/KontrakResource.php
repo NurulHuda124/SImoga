@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\KontrakResource\Pages;
 use App\Models\Kontrak;
+use DateTime;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
@@ -22,13 +23,13 @@ class KontrakResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'nama_pegawai';
     protected static ?string $pluralModelLabel = 'Kontrak';
-    protected static ?string $navigationLabel = 'Kontrak';
+    protected static ?string $navigationLabel = 'Pegawai Aktif';
     protected static ?string $navigationIcon = 'heroicon-o-newspaper';
     protected static ?string $navigationGroup = 'MANAJEMEN MASA KERJA PEGAWAI';
     protected static ?int $navigationSort = 2;
     protected static function getNavigationBadge(): ?string
     {
-    return static::getModel()::where('status_kontrak', '<=', date('Y-m-d'))->count();
+        return static::getModel()::where('status_kontrak', '>', date('Y-m-d'))->count();
     }
 
     public static function form(Form $form): Form
@@ -43,42 +44,91 @@ class KontrakResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('nama_pegawai')->searchable(),
+                TextColumn::make('no_induk_karyawan')->searchable(),
+                TextColumn::make('nama_karyawan')->searchable(),
                 TextColumn::make('email')->searchable()->toggleable(),
+                TextColumn::make('tanggal_lahir')->date()->searchable()->toggleable(),
+                TextColumn::make('no_kontrak_perusahaan')->date()->searchable()->toggleable(),
                 TextColumn::make('tanggal_kontrak_awal')->date()->searchable()->toggleable(),
                 TextColumn::make('tanggal_kontrak_akhir')->date()->searchable()->toggleable(),
                 IconColumn::make('status_kontrak')
-                ->options([
-                    'heroicon-s-check-circle' => fn ($state): bool => $state > date('Y-m-d'),
-                    'heroicon-s-x-circle' => fn ($state): bool => $state <= date('Y-m-d'),
-                    'heroicon-s-exclamation-circle'=> fn ($state): bool =>
-                    $state > date('Y-m-d') && $state <= date('Y-m-d', strtotime('+1 month')), ])
-                ->colors([
-                    'success' => fn ($state): bool => $state > date('Y-m-d'),
-                    'danger' => fn ($state): bool => $state <= date('Y-m-d'),
-                    'warning' => fn ($state): bool =>
-                    $state > date('Y-m-d') && $state <= date('Y-m-d', strtotime('+1 month')),
+                    ->options([
+                        'heroicon-s-check-circle' => fn ($state): bool => $state > date('Y-m-d'),
+                        'heroicon-s-x-circle' => fn ($state): bool => $state <= date('Y-m-d'),
+                        'heroicon-s-exclamation-circle' => fn ($state): bool =>
+                        $state > date('Y-m-d') && $state <= date('Y-m-d', strtotime('+1 years')),
                     ])
-                ->size('xl'),
+                    ->colors([
+                        'success' => fn ($state): bool => $state > date('Y-m-d'),
+                        'danger' => fn ($state): bool => $state <= date('Y-m-d'),
+                        'warning' => fn ($state): bool =>
+                        $state > date('Y-m-d') && $state <= date('Y-m-d', strtotime('+1 years')),
+                    ])
+                    ->size('xl'),
+                IconColumn::make('status_pensiun')
+                    ->options([
+                        'heroicon-s-x-circle' => function ($state) {
+                            $tanggalLahir = new DateTime($state);
+                            $selisih = $tanggalLahir->diff(new DateTime());
+                            return $selisih->y >= 56;
+                        },
+                        'heroicon-s-check-circle' => function ($state) {
+                            $tanggalLahir = new DateTime($state);
+                            $selisih = $tanggalLahir->diff(new DateTime());
+                            return $selisih->y < 56;
+                        }, 'heroicon-s-exclamation-circle' => function ($state) {
+                            $tanggalLahir = new DateTime($state);
+                            $tanggalPensiun = $tanggalLahir->modify('+56 years');
+                            $sekarang = new DateTime();
+                            // Hitung tanggal setahun ke depan dari sekarang
+                            $setahunKemudian = new DateTime();
+                            $setahunKemudian->modify('+1 years');
+                            // Hitung selisih tanggal pensiun dengan tanggal setahun ke depan
+                            $selisih = $setahunKemudian->diff($tanggalPensiun);
+                            return $selisih->m == 0 && $sekarang < $setahunKemudian;
+                        },
+                    ])->colors([
+                        'danger' => function ($state) {
+                            $tanggalLahir = new DateTime($state);
+                            $selisih = $tanggalLahir->diff(new DateTime());
+                            return $selisih->y >= 56;
+                        },
+                        'success' => function ($state) {
+                            $tanggalLahir = new DateTime($state);
+                            $selisih = $tanggalLahir->diff(new DateTime());
+                            return $selisih->y < 56;
+                        }, 'warning' => function ($state) {
+                            $tanggalLahir = new DateTime($state);
+                            $tanggalPensiun = $tanggalLahir->modify('+56 years');
+                            $sekarang = new DateTime();
+                            $setahunKemudian = new DateTime();
+                            $setahunKemudian->modify('+1 years');
+                            $selisih = $setahunKemudian->diff($tanggalPensiun);
+
+                            return $selisih->m == 0 && $sekarang < $setahunKemudian;
+                        }
+                    ])->size('xl')
             ])
             ->filters([
                 Filter::make('status_kontrak')
-                ->form([
-                DatePicker::make('tanggal_kontrak_akhir'),
-                ])
-                ->query(function (Builder $query, array $data): Builder {
-                return $query
-                ->when(
-                $data['tanggal_kontrak_akhir'],
-                fn (Builder $query, $date): Builder => $query->whereDate('status_kontrak', '<=', $date),
-                ); }) ])
+                    ->form([
+                        DatePicker::make('tanggal_kontrak_akhir'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['tanggal_kontrak_akhir'],
+                                fn (Builder $query, $date): Builder => $query->whereDate('status_kontrak', '<=', $date),
+                            );
+                    })
+            ])
             ->actions([
                 // Tables\Actions\ViewAction::make(),
                 // Tables\Actions\EditAction::make(),
-                Tables\Actions\Action::make('print')
-                ->icon('heroicon-s-printer')
-                ->url(fn(Kontrak $record)=>route('downloadkontrak.pdf', $record))
-                ->openUrlInNewTab(),
+                Tables\Actions\Action::make('show')
+                    ->icon('heroicon-s-printer')
+                    ->url(fn (Kontrak $record) => route('downloadkontrak.pdf', $record))
+                    ->openUrlInNewTab(),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),

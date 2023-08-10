@@ -3,12 +3,12 @@
 namespace App\Filament\Resources\KontrakResource\Widgets;
 
 use App\Models\Kontrak;
-use Filament\Forms\Components\Actions\Modal\Actions\Action;
-use Filament\Notifications\Events\DatabaseNotificationsSent;
+use App\Models\MitraPerusahaan;
 use Filament\Notifications\Notification;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Card;
 use Illuminate\Support\Carbon;
+
 class StatsOverview extends BaseWidget
 {
 
@@ -16,32 +16,94 @@ class StatsOverview extends BaseWidget
     protected function getCards(): array
     {
         $recipient = auth()->user();
+        $jmlhP = Kontrak::where(function ($query) {
+        $query->whereDate('status_pensiun', '>', now()->subYears(56));
+        })->count();
+
+        $jmlhPensiun = Kontrak::where(function ($query) {
+        $query->whereDate('status_pensiun', '<=', now()->subYears(56));
+            })->count();
+            $jmlhHPensiun = Kontrak::whereBetween('tanggal_lahir', [
+            now()->subYears(54)->subMonth(), // satu bulan sebelum berusia 54 tahun
+            now()->subYears(54) // tepat saat berusia 54 tahun
+            ])->count();
         $jmlhAktif = Kontrak::where('status_kontrak', '>', date('Y-m-d'))->count();
         $jmlhNonaktif = Kontrak::where('status_kontrak', '<=', date('Y-m-d'))->count();
-        $nextMonth = Carbon::now()->addMonth();
-        $jmlhHabisKontrak = Kontrak::whereIn('id', function ($query) use ($nextMonth) {
-        $query->select('id')
-        ->from('kontraks')
-        ->whereBetween('tanggal_kontrak_akhir', [Carbon::now(), $nextMonth]);
+        $nextYear = Carbon::now()->addYears();
+        $jmlhHabisKontrak = Kontrak::whereIn('id', function ($query) use ($nextYear) {
+            $query->select('id')
+                ->from('kontraks')
+                ->whereBetween('tanggal_kontrak_akhir', [Carbon::now(), $nextYear]);
         })->count();
-        Notification::make()
-        ->title('**Kontrak Hampir Tidak Berlaku!**')
-        ->body('Jumlah Pegawai Kontrak Hampir Tidak Berlaku : ' . $jmlhHabisKontrak)
-        ->warning()
-        ->seconds(3)
-        ->send();
-        Notification::make()
-            ->title('**Kontrak Tidak Berlaku!**')
-            ->body('Jumlah Pegawai Kontrak Tidak Berlaku : ' . $jmlhNonaktif)
+         $jmlhNAM = MitraPerusahaan::where('status_kontrak_perusahaan', '<=', date('Y-m-d'))->count();
+             $jmlhHabisMitraPerusahaan = MitraPerusahaan::whereIn('id', function ($query) use ($nextYear) {
+             $query->select('id')
+             ->from('mitra_perusahaans')
+             ->whereBetween('tanggal_kontrak_akhir_perusahaan', [Carbon::now(), $nextYear]);
+             })->count();
+        if (!session('notification_shown')) {
+            if ($jmlhHabisKontrak > 0) {
+            Notification::make()
+                ->title('**Kontrak Hampir Tidak Berlaku!**')
+                ->body('Jumlah Pegawai Kontrak Hampir Tidak Berlaku : ' . $jmlhHabisKontrak)
+                ->warning()
+                ->persistent()
+                ->sendToDatabase($recipient);
+            }
+            if ($jmlhNonaktif > 0) {
+                Notification::make()
+                ->title('**Kontrak Tidak Berlaku!**')
+                ->body('Jumlah Pegawai Kontrak Tidak Berlaku : ' . $jmlhNonaktif)
+                ->danger()
+                ->persistent()
+                ->sendToDatabase($recipient);
+            }
+            if ($jmlhHPensiun > 0) {
+                Notification::make()
+                ->title('**Hampir Pensiun!**')
+                ->body('Jumlah Pegawai Hampir Pensiun : ' . $jmlhHPensiun)
+                ->warning()
+                ->persistent()
+                ->sendToDatabase($recipient);
+            }
+            if ($jmlhPensiun > 0) {
+                Notification::make()
+                ->title('**Pensiun!**')
+                ->body('Jumlah Pegawai Pensiun : ' . $jmlhPensiun)
+                ->danger()
+                ->persistent()
+                ->sendToDatabase($recipient);
+            }
+
+            if ($jmlhHabisMitraPerusahaan > 0) {
+            Notification::make()
+            ->title('**Kontrak Mitra Hampir Tidak Berlaku!**')
+            ->body('Jumlah Mitra Kontrak Hampir Tidak Berlaku : ' . $jmlhHabisMitraPerusahaan)
+            ->warning()
+            ->persistent()
+            ->sendToDatabase($recipient);
+            }
+
+            if ($jmlhNAM > 0) {
+            Notification::make()
+            ->title('**Kontrak Mitra Tidak Berlaku!**')
+            ->body('Jumlah Mitra Kontrak Tidak Berlaku : ' . $jmlhNAM)
             ->danger()
-            ->seconds(3)
-            ->send();
+            ->persistent()
+            ->sendToDatabase($recipient);
+            }
+            
+            // Tandai bahwa notifikasi telah ditampilkan dalam session
+            session(['notification_shown' => true]);
+        }
         return [
             Card::make('Jumlah Pegawai Kontrak Berlaku', $jmlhAktif)->chart([7, 2, 10, 3, 15, 4, 17]),
             Card::make('Jumlah Pegawai Kontrak Tidak Berlaku', $jmlhNonaktif)->chart([
                 17, 4, 15, 3, 10, 2,
                 7
             ]),
+            Card::make('Jumlah Pegawai Belum Pensiun', $jmlhP)->chart([7, 2, 10, 3, 15, 4, 17]),
+            Card::make('Jumlah Pegawai Pensiun', $jmlhPensiun)->chart([17, 4, 15, 3, 10, 2, 7]),
         ];
     }
 }

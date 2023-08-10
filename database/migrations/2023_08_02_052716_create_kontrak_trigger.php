@@ -14,9 +14,13 @@ return new class extends Migration
         DB::unprepared('
         CREATE TRIGGER kontrak_trigger AFTER INSERT ON pegawais
         FOR EACH ROW
-        INSERT INTO kontraks (nama_pegawai, email, tanggal_kontrak_awal, tanggal_kontrak_akhir , status_kontrak) 
+        INSERT INTO kontraks (no_induk_karyawan, nama_karyawan, email, tanggal_lahir, 
+        no_kontrak_perusahaan, tanggal_kontrak_awal, tanggal_kontrak_akhir,
+        status_kontrak, status_pensiun)
         VALUES
-        (NEW.nama_pegawai, NEW.email, NEW.tanggal_kontrak_awal, NEW.tanggal_kontrak_akhir, NEW.tanggal_kontrak_akhir)
+        (NEW.no_induk_karyawan, NEW.nama_karyawan, NEW.email,NEW.tanggal_lahir,
+        NEW.no_kontrak_perusahaan, NEW.tanggal_kontrak_awal, NEW.tanggal_kontrak_akhir,
+        NEW.tanggal_kontrak_akhir, NEW.tanggal_lahir)
         ');
     }
 
