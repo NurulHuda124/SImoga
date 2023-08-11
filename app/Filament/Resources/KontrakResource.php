@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\DatePicker;
+use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Widgets\StatsOverviewWidget;
 
@@ -21,11 +22,10 @@ class KontrakResource extends Resource
 {
     protected static ?string $model = Kontrak::class;
 
-    protected static ?string $recordTitleAttribute = 'nama_pegawai';
     protected static ?string $pluralModelLabel = 'Kontrak';
     protected static ?string $navigationLabel = 'Pegawai Aktif';
     protected static ?string $navigationIcon = 'heroicon-o-newspaper';
-    protected static ?string $navigationGroup = 'MANAJEMEN MASA KERJA PEGAWAI';
+    protected static ?string $navigationGroup = 'MANAJEMEN MASA KERJA KARYAWAN';
     protected static ?int $navigationSort = 2;
     protected static function getNavigationBadge(): ?string
     {
@@ -44,14 +44,19 @@ class KontrakResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('no_induk_karyawan')->searchable(),
-                TextColumn::make('nama_karyawan')->searchable(),
-                TextColumn::make('email')->searchable()->toggleable(),
-                TextColumn::make('tanggal_lahir')->date()->searchable()->toggleable(),
-                TextColumn::make('no_kontrak_perusahaan')->date()->searchable()->toggleable(),
-                TextColumn::make('tanggal_kontrak_awal')->date()->searchable()->toggleable(),
-                TextColumn::make('tanggal_kontrak_akhir')->date()->searchable()->toggleable(),
-                IconColumn::make('status_kontrak')
+                TextColumn::make('no_induk_karyawan')->label('No Induk Karyawan')->searchable(),
+                TextColumn::make('nama_karyawan')->label('Nama Karyawan')->searchable(),
+                BadgeColumn::make('email')->icon('heroicon-o-mail')->color('warning')->copyable()
+                ->copyMessage('Email address copied')
+                ->copyMessageDuration(1500)->searchable()->toggleable(),
+                TextColumn::make('tanggal_lahir')->label('Tanggal Lahir')->date()->searchable()->toggleable(),
+                TextColumn::make('no_kontrak_perusahaan')
+                ->label('No Kontrak Perusahaan')->date()->searchable()->toggleable(),
+                TextColumn::make('tanggal_kontrak_awal')
+                ->label('Tanggal Kontrak Dimulai')->date()->searchable()->toggleable(),
+                TextColumn::make('tanggal_kontrak_akhir')
+                ->label('Tanggal Kontrak Berakhir')->date()->searchable()->toggleable(),
+                IconColumn::make('status_kontrak')->label('Status Masa Kontrak')
                     ->options([
                         'heroicon-s-check-circle' => fn ($state): bool => $state > date('Y-m-d'),
                         'heroicon-s-x-circle' => fn ($state): bool => $state <= date('Y-m-d'),
@@ -125,7 +130,7 @@ class KontrakResource extends Resource
             ->actions([
                 // Tables\Actions\ViewAction::make(),
                 // Tables\Actions\EditAction::make(),
-                Tables\Actions\Action::make('show')
+                Tables\Actions\Action::make('show')->label('PDF')
                     ->icon('heroicon-s-printer')
                     ->url(fn (Kontrak $record) => route('downloadkontrak.pdf', $record))
                     ->openUrlInNewTab(),

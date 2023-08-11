@@ -20,7 +20,6 @@ return new class extends Migration
         no_induk_karyawan = NEW.no_induk_karyawan,
         nama_karyawan = NEW.nama_karyawan,
         email = NEW.email,
-        jenis_kelamin = NEW.jenis_kelamin,
         tanggal_lahir = NEW.tanggal_lahir,
         no_kontrak_perusahaan = NEW.no_kontrak_perusahaan,
         tanggal_kontrak_awal = NEW.tanggal_kontrak_awal,

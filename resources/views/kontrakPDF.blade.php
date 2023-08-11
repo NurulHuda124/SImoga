@@ -80,12 +80,24 @@
         </div>
         <table>
             <tr>
-                <th>Nama Pegawai</th>
-                <td>{{ $kontrak->nama_pegawai }}</td>
+                <th>Nama Induk Karyawan</th>
+                <td>{{ $kontrak->no_induk_karyawan }}</td>
+            </tr>
+            <tr>
+                <th>Nama Karyawan</th>
+                <td>{{ $kontrak->nama_karyawan }}</td>
+            </tr>
+            <tr>
+                <th>Tanggal Lahir</th>
+                <td>{{ \Carbon\Carbon::parse($kontrak->tanggal_lahir)->format('d-m-Y') }}</td>
             </tr>
             <tr>
                 <th>Email</th>
                 <td>{{ $kontrak->email }}</td>
+            </tr>
+            <tr>
+                <th>Jenis Kelamin</th>
+                <td>{{ $pegawai->sex }}</td>
             </tr>
             <tr>
                 <th>Divisi</th>
@@ -104,12 +116,24 @@
                 <td>{{ $pegawai->nama_perusahaan }}</td>
             </tr>
             <tr>
+                <th>Tanggal Kontrak Perusahaan Mitra Dimulai</th>
+                <td>{{ \Carbon\Carbon::parse($pegawai->tanggal_kontrak_awal_perusahaan)->format('d-m-Y') }}</td>
+            </tr>
+            <tr>
+                <th>Tanggal Kontrak Perusahaan Mitra Berakhir</th>
+                <td>{{ \Carbon\Carbon::parse($pegawai->tanggal_kontrak_akhir_perusahaan)->format('d-m-Y') }}</td>
+            </tr>
+            <tr>
                 <th>Tanggal Kontrak Dimulai</th>
                 <td>{{ \Carbon\Carbon::parse($kontrak->tanggal_kontrak_awal)->format('d-m-Y') }}</td>
             </tr>
             <tr>
                 <th>Tanggal Kontrak Berakhir</th>
                 <td>{{ \Carbon\Carbon::parse($kontrak->tanggal_kontrak_akhir)->format('d-m-Y') }}</td>
+            </tr>
+            <tr>
+                <th>Tanggal Pensiun</th>
+                <td>{{ date('d-m-Y', strtotime($kontrak->tanggal_lahir . ' + 54 years')) }}</td>
             </tr>
             <!-- Add more details as needed -->
         </table>

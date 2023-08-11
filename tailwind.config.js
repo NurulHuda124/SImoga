@@ -1,20 +1,20 @@
-const colors = require('tailwindcss/colors')
+const colors = require("tailwindcss/colors");
 export default {
-    content: ['./resources/**/*.blade.php', './vendor/filament/**/*.blade.php'],
-    darkMode: 'class',
+    content: ["./resources/**/*.blade.php", "./vendor/filament/**/*.blade.php"],
+    darkMode: "class",
     theme: {
         extend: {
             colors: {
                 danger: colors.rose,
-                primary: colors.blue,
+                primary: colors.red,
                 secondary: colors.gray,
-                success: colors.green,
+                success: colors.emerald,
                 warning: colors.yellow,
             },
         },
     },
     plugins: [
-        require('@tailwindcss/forms'),
-        require('@tailwindcss/typography'),
+        require("@tailwindcss/forms"),
+        require("@tailwindcss/typography"),
     ],
-}
+};

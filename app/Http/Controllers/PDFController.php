@@ -22,17 +22,4 @@ class PDFController extends Controller
         // Return the PDF as a download
         return $pdf->download('kontrak.pdf');
     }
-
-    public function pensiunpdf($id)
-    {
-    // Find the Kontrak by its ID
-    $pensiun = Pensiun::findOrFail($id);
-    $pegawai = Pegawai::findOrFail($id);
-
-    // Generate PDF using the view 'kontrakPDF'
-    $pdf = PDF::loadView('pensiunPDF', ['pensiun' => $pensiun, 'pegawai'=>$pegawai]);
-
-    // Return the PDF as a download
-    return $pdf->download('pensiun.pdf');
-    }
 }
