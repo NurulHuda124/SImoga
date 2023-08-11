@@ -82,14 +82,15 @@ class MitraPerusahaanResource extends Resource
                 TextColumn::make('email')->searchable()->toggleable(),
                 TextColumn::make('website')->searchable()->toggleable(),
                 TextColumn::make('no_telp_1')->searchable()->toggleable(),
-                TextColumn::make('no_telp_2')->searchable()->toggleable(),
-                TextColumn::make('no_telp_3')->searchable()->toggleable(),
+                TextColumn::make('no_telp_2')->placeholder('Tidak Ada')->searchable()->toggleable(),
+                TextColumn::make('no_telp_3')->placeholder('Tidak Ada')->searchable()->toggleable(),
                 TextColumn::make('tanggal_kontrak_awal_perusahaan')->date()->searchable()->toggleable(),
                 TextColumn::make('tanggal_kontrak_akhir_perusahaan')->date()->searchable()->toggleable(),
                 IconColumn::make('status_kontrak_perusahaan')
                     ->options([
                         'heroicon-s-check-circle' => fn ($state): bool => $state > date('Y-m-d'),
-                        'heroicon-s-x-circle' => fn ($state): bool => $state <= date('Y-m-d'), 'heroicon-s-exclamation-circle' =>
+                        'heroicon-s-x-circle' => fn ($state): bool => $state <= date('Y-m-d'), 
+                        'heroicon-s-exclamation-circle' =>
                         fn ($state): bool =>
                         $state > date('Y-m-d') && $state <= date('Y-m-d', strtotime('+1 years')),
                     ])->colors([

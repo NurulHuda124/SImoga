@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('nama_karyawan');
             $table->bigInteger('nik');
             $table->string('email');
+            $table->string('jenis_kelamin');
             $table->string('tempat_lahir');
             $table->date('tanggal_lahir');
             $table->string('alamat');

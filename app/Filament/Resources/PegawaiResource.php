@@ -24,6 +24,7 @@ use Filament\Widgets\StatsOverviewWidget;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Closure;
+use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\BadgeColumn;
@@ -52,10 +53,12 @@ class PegawaiResource extends Resource
                 Section::make('Identitas Diri')->schema([
                     TextInput::make('no_induk_karyawan')->required(),
                     TextInput::make('nama_karyawan')->required(),
-                    TextInput::make('nik')->required()
+                    TextInput::make('nik')
+                    ->label('NIK')->required()
                         ->tel()
                         ->telRegex('/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/'),
                     TextInput::make('email')->required(),
+                    TextInput::make('jenis_kelamin')->required(),
                     TextInput::make('tempat_lahir')->required(),
                     DatePicker::make('tanggal_lahir')->format('Y-m-d')->required(),
                     Select::make('jabatan')->required()
@@ -155,7 +158,8 @@ class PegawaiResource extends Resource
                     ->url(fn ($record) => Storage::url($record->file_nda))
                     ->openUrlInNewTab(),
                 TextColumn::make('nama_karyawan')->searchable(),
-                TextColumn::make('nik')->searchable(),
+                TextColumn::make('nik')->searchable()->toggleable(),
+                TextColumn::make('jenis_kelamin')->searchable()->toggleable(),
                 TextColumn::make('email')->searchable()->toggleable(),
                 TextColumn::make('tempat_lahir')->searchable()->toggleable(),
                 TextColumn::make('tanggal_lahir')->date()->searchable()->toggleable(),
