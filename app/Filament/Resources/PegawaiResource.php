@@ -31,6 +31,7 @@ use Livewire\TemporaryUploadedFile;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\SelectColumn;
 use Illuminate\Support\Facades\Storage;
+use PhpParser\Node\Stmt\Label;
 
 class PegawaiResource extends Resource
 {
@@ -60,6 +61,11 @@ class PegawaiResource extends Resource
                     TextInput::make('email')->required(),
                     TextInput::make('tempat_lahir')->required()->label('Tempat Lahir'),
                     DatePicker::make('tanggal_lahir')->format('Y-m-d')->required()->label('Tanggal Lahir'),
+                    Select::make('sex')->label('Jenis_kelamin')->required()
+                    ->options([
+                        'laki-laki'=>'Laki-laki',
+                        'perempuan'=>'Perempuan'
+                    ]),
                     Select::make('jabatan')->required()
                         ->options(Jabatan::all()->pluck('jabatan', 'jabatan')),
                     Select::make('divisi')->label('Fungsi')->required()
@@ -163,7 +169,11 @@ class PegawaiResource extends Resource
                     ->openUrlInNewTab(),
                 TextColumn::make('nama_karyawan')->searchable()->label('Nama Karyawan'),
                 TextColumn::make('nik')->searchable()->label('NIK'),
-                TextColumn::make('email')->searchable()->toggleable(),
+                BadgeColumn::make('email')->searchable()->toggleable()->icon('heroicon-o-mail')->color('warning')
+                ->copyable()
+                ->copyMessage('Email address copied')
+                ->copyMessageDuration(1500),
+                TextColumn::make('sex')->searchable()->label('Jenis Kelamin'),
                 TextColumn::make('tempat_lahir')->searchable()->toggleable()->label('Tempat Lahir'),
                 TextColumn::make('tanggal_lahir')->date()->searchable()->toggleable()->label('Tanggal Lahir'),
                 TextColumn::make('alamat')->searchable()->toggleable(),

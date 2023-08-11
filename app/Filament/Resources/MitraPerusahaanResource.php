@@ -87,11 +87,14 @@ class MitraPerusahaanResource extends Resource
                 ->searchable()
                 ->label('Nama Perusahaan'),
                 TextColumn::make('jenis_mitra')->searchable()->label('Jenis Mitra'),
-                TextColumn::make('email')->searchable()->toggleable(),
+                BadgeColumn::make('email')->searchable()->toggleable()->icon('heroicon-o-mail')->color('warning')
+                ->copyable()
+                ->copyMessage('Email address copied')
+                ->copyMessageDuration(1500),
                 TextColumn::make('website')->searchable()->toggleable(),
                 TextColumn::make('no_telp_1')->searchable()->toggleable()->label('No. Telp 1'),
-                TextColumn::make('no_telp_2')->searchable()->toggleable()->label('No. Telp 2'),
-                TextColumn::make('no_telp_3')->searchable()->toggleable()->label('No. Telp 3'),
+                TextColumn::make('no_telp_2')->searchable()->toggleable()->label('No. Telp 2')->placeholder('Tidak Ada'),
+                TextColumn::make('no_telp_3')->searchable()->toggleable()->label('No. Telp 3')->placeholder('Tidak Ada'),
                 TextColumn::make('tanggal_kontrak_awal_perusahaan')->date()->searchable()->toggleable()->label('Tanggal Kontrak Awal Perusahaan'),
                 TextColumn::make('tanggal_kontrak_akhir_perusahaan')->date()->searchable()->toggleable()->label('Tanggal Kontrak Akhir Perusahaan'),
                 IconColumn::make('status_kontrak_perusahaan')->label('Status Kontrak Perusahaan')
@@ -111,7 +114,7 @@ class MitraPerusahaanResource extends Resource
                     ->options([
                         'TKJP' => 'TKJP',
                         'Konsultan' => 'Konsultan',
-                        'Audit' => 'Audit',
+                        'Auditor' => 'Auditor',
                     ])
             ])
             ->actions([
