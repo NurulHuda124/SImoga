@@ -7,7 +7,7 @@ use Filament\Widgets\DoughnutChartWidget;
 
 class PegawaiDoughnutChart extends DoughnutChartWidget
 {
-    protected static ?string $heading = 'Jumlah Pegawai Per Masa Kontrak';
+    protected static ?string $heading = 'Jumlah Karyawan Per Masa Kontrak';
     protected static ?int $sort = 2;
     protected function getData(): array
     {
@@ -16,7 +16,7 @@ class PegawaiDoughnutChart extends DoughnutChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Jumlah Pegawai',
+                    'label' => 'Jumlah Karyawan',
                     'data' => [$jmlhBerlaku, $jmlhTdkBerlaku],
                     'fill' => 'start',
                     'backgroundColor' => [
@@ -31,7 +31,7 @@ class PegawaiDoughnutChart extends DoughnutChartWidget
                     'borderRadius' => 10,
                 ],
             ],
-            'labels' => ['Pegawai Kontrak Berlaku', 'Pegawai Kontrak Tidak Berlaku'],
+            'labels' => ['Karyawan Kontrak Berlaku', 'Karyawan Kontrak Tidak Berlaku'],
         ];
     }
 }

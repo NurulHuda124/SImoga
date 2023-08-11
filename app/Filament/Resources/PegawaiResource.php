@@ -24,7 +24,6 @@ use Filament\Widgets\StatsOverviewWidget;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Closure;
-use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\BadgeColumn;
@@ -52,24 +51,21 @@ class PegawaiResource extends Resource
         return $form
             ->schema([
                 Section::make('Identitas Diri')->schema([
-                    TextInput::make('no_induk_karyawan')->label('No Induk Karyawan')->required(),
-                    TextInput::make('nama_karyawan')->label('Nama Karyawan')->required(),
-                    TextInput::make('nik')
-                    ->label('NIK')->required()
+                    TextInput::make('no_induk_karyawan')->required()->label('No. Induk Karyawan'),
+                    TextInput::make('nama_karyawan')->required()->label('Nama Karyawan'),
+                    TextInput::make('nik')->required()
+                        ->label('NIK')
                         ->tel()
                         ->telRegex('/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/'),
                     TextInput::make('email')->required(),
-                    Select::make('sex')->options([
-                        'laki-laki'=>'Laki-laki',
-                        'perempuan'=>'Perempuan'
-                    ])->label('Jenis Kelamin')->required(),
-                    TextInput::make('tempat_lahir')->label('Tempat Lahir')->required(),
-                    DatePicker::make('tanggal_lahir')->label('Tanggal Lahir')->format('Y-m-d')->required(),
+                    TextInput::make('tempat_lahir')->required()->label('Tempat Lahir'),
+                    DatePicker::make('tanggal_lahir')->format('Y-m-d')->required()->label('Tanggal Lahir'),
                     Select::make('jabatan')->required()
                         ->options(Jabatan::all()->pluck('jabatan', 'jabatan')),
                     Select::make('divisi')->label('Fungsi')->required()
                         ->options(Divisi::all()->pluck('divisi', 'divisi')),
                     TextInput::make('no_telp')->required()
+                        ->label('No. Telp')
                         ->tel()
                         ->telRegex('/^([+]?(?:[(][0-9]{1,4}[)])?[-\s\.\/0-9]*)$/'),
                     TextArea::make('alamat')->required(),
@@ -93,9 +89,10 @@ class PegawaiResource extends Resource
                         }),
                 ]),
                 Section::make('Mitra')->schema([
-                    Select::make('no_kontrak_perusahaan')->label('No Kontrak Perusahaan')->required()
+                    Select::make('no_kontrak_perusahaan')->required()->label('No. Kontrak Perusahaan')
                         ->options(MitraPerusahaan::all()->pluck('no_kontrak_perusahaan', 'no_kontrak_perusahaan')),
                     Select::make('jenis_mitra')->required()
+                        ->label('Jenis Mitra')
                         ->searchable()
                         ->options(function (Closure $get) {
                             return MitraPerusahaan::where(
@@ -106,7 +103,8 @@ class PegawaiResource extends Resource
                                 'jenis_mitra'
                             );
                         }),
-                    Select::make('nama_perusahaan')->label('Nama Perusahaan')->required()
+                    Select::make('nama_perusahaan')->required()
+                        ->label('Nama Perusahaan')
                         ->searchable()
                         ->options(function (Closure $get) {
                             return MitraPerusahaan::where(
@@ -117,7 +115,8 @@ class PegawaiResource extends Resource
                                 'nama_perusahaan'
                             );
                         }),
-                    Select::make('tanggal_kontrak_awal_perusahaan')->label('Tanggal Kontral Mitra Dimulai')->required()
+                    Select::make('tanggal_kontrak_awal_perusahaan')->required()
+                        ->label('Tanggal Kontrak Awal Perusahaan')
                         ->searchable()
                         ->options(function (Closure $get) {
                             return MitraPerusahaan::where(
@@ -128,7 +127,8 @@ class PegawaiResource extends Resource
                                 'tanggal_kontrak_awal_perusahaan'
                             );
                         }),
-                    Select::make('tanggal_kontrak_akhir_perusahaan')->label('Tanggal Kontrak Berakhir')->required()
+                    Select::make('tanggal_kontrak_akhir_perusahaan')->required()
+                        ->label('Tanggal Kontrak Akhir Perusahaan')
                         ->searchable()
                         ->options(function (Closure $get) {
                             return MitraPerusahaan::where(
@@ -141,8 +141,8 @@ class PegawaiResource extends Resource
                         }),
                 ])->columns(2),
                 Section::make('Masa Kerja')->schema([
-                    DatePicker::make('tanggal_kontrak_awal')->label('Tanggal Kontrak Dimulai')->format('Y-m-d')->required(),
-                    DatePicker::make('tanggal_kontrak_akhir')->label('Tanggal Kontrak Berakhir')->format('Y-m-d')->required(),
+                    DatePicker::make('tanggal_kontrak_awal')->format('Y-m-d')->required()->label('Tanggal Kontrak Awal'),
+                    DatePicker::make('tanggal_kontrak_akhir')->format('Y-m-d')->required()->label('Tanggal Kontrak Akhir'),
                 ])->columns(2),
             ]);
     }
@@ -151,7 +151,7 @@ class PegawaiResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('no_induk_karyawan')->label('No Induk Karyawan')->searchable(),
+                TextColumn::make('no_induk_karyawan')->searchable()->label('No. Induk Karyawan'),
                 ImageColumn::make('file_ktp')->width(100)->height('auto')
                     ->label('File KTP')
                     ->url(fn ($record) => Storage::url($record->file_ktp))
@@ -161,36 +161,29 @@ class PegawaiResource extends Resource
                     ->limit(20)->icon('heroicon-s-external-link')
                     ->url(fn ($record) => Storage::url($record->file_nda))
                     ->openUrlInNewTab(),
-                TextColumn::make('nama_karyawan')->label('Nama Karyawan')->searchable(),
-                TextColumn::make('nik')->label('NIK')->searchable()->toggleable(),
-                TextColumn::make('sex')->label('Jenis Kelamin')->searchable()->toggleable(),
-                BadgeColumn::make('email')->color('warning')->icon('heroicon-o-mail')->copyable()
-                ->copyMessage('Email address copied')
-                ->copyMessageDuration(1500)->searchable()->toggleable(),
-                TextColumn::make('tempat_lahir')->label('Tempat Lahir')->searchable()->toggleable(),
-                TextColumn::make('tanggal_lahir')->label('Tanggal Lahir')->date()->searchable()->toggleable(),
-                TextColumn::make('alamat')->limit(40)->searchable()->toggleable(),
-                TextColumn::make('no_telp')->label('No Telp')->searchable()->toggleable(),
+                TextColumn::make('nama_karyawan')->searchable()->label('Nama Karyawan'),
+                TextColumn::make('nik')->searchable()->label('NIK'),
+                TextColumn::make('email')->searchable()->toggleable(),
+                TextColumn::make('tempat_lahir')->searchable()->toggleable()->label('Tempat Lahir'),
+                TextColumn::make('tanggal_lahir')->date()->searchable()->toggleable()->label('Tanggal Lahir'),
+                TextColumn::make('alamat')->searchable()->toggleable(),
+                TextColumn::make('no_telp')->searchable()->toggleable()->label('No. Telp'),
                 TextColumn::make('jabatan')->searchable(),
                 TextColumn::make('divisi')->searchable(),
-                TextColumn::make('jenis_mitra')->label('Jenis Mitra')->searchable(),
-                TextColumn::make('nama_perusahaan')->label('Nama Perusahaan')->searchable()->toggleable(),
-                TextColumn::make('no_kontrak_perusahaan')->label('No Kontrak Perusahaan')->searchable()->toggleable(),
-                TextColumn::make('tanggal_kontrak_awal_perusahaan')->label('Tanggal Kontrak Perusahaan
-                Dimulai')->date()->searchable()->toggleable(),
-                TextColumn::make('tanggal_kontrak_akhir_perusahaan')->label('Tanggal Kontrak Perusahaan
-                Berakhir')->date()->searchable()->toggleable(),
-                TextColumn::make('tanggal_kontrak_awal')->label('Tanggal Kontrak
-                Dimulai')->date()->searchable()->toggleable(),
-                TextColumn::make('tanggal_kontrak_akhir')->label('Tanggal Kontrak
-                Berakhir')->date()->searchable()->toggleable(),
+                TextColumn::make('jenis_mitra')->searchable()->label('Jenis Mitra'),
+                TextColumn::make('nama_perusahaan')->searchable()->toggleable()->label('Nama Perusahaan'),
+                TextColumn::make('no_kontrak_perusahaan')->searchable()->toggleable()->label('No. Kontrak Perusahaan'),
+                TextColumn::make('tanggal_kontrak_awal_perusahaan')->date()->searchable()->toggleable()->label('Tanggal Kontrak Awal Perusahaan'),
+                TextColumn::make('tanggal_kontrak_akhir_perusahaan')->date()->searchable()->toggleable()->label('Tanggal Kontrak Akhir Perusahaan'),
+                TextColumn::make('tanggal_kontrak_awal')->date()->searchable()->toggleable()->label('Tanggal Kontrak Awal'),
+                TextColumn::make('tanggal_kontrak_akhir')->date()->searchable()->toggleable()->label('Tanggal Kontrak Akhir'),
             ])
             ->filters([
                 SelectFilter::make('jenis_mitra')
                     ->options([
                         'TKJP' => 'TKJP',
                         'Konsultan' => 'Konsultan',
-                        'Audit' => 'Audit',
+                        'Auditor' => 'Auditor',
                     ])
             ])
             ->actions([
@@ -205,7 +198,7 @@ class PegawaiResource extends Resource
     public static function getRelations(): array
     {
         return [
-            // 
+            //
         ];
     }
 
