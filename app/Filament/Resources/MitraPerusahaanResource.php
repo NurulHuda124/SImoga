@@ -79,8 +79,12 @@ class MitraPerusahaanResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('no_kontrak_perusahaan')->searchable()->label('No. Kontrak Perusahaan'),
-                TextColumn::make('nama_perusahaan')->searchable()->label('Nama Perusahaan'),
+                TextColumn::make('no_kontrak_perusahaan')
+                ->searchable()
+                ->label('No. Kontrak Perusahaan'),
+                TextColumn::make('nama_perusahaan')
+                ->searchable()
+                ->label('Nama Perusahaan'),
                 TextColumn::make('jenis_mitra')->searchable()->label('Jenis Mitra'),
                 TextColumn::make('email')->searchable()->toggleable(),
                 TextColumn::make('website')->searchable()->toggleable(),
