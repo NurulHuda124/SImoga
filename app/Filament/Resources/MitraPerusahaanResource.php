@@ -44,29 +44,32 @@ class MitraPerusahaanResource extends Resource
         return $form
             ->schema([
                 Section::make('Identitas Perusahaan')->schema([
-                    TextInput::make('nama_perusahaan')->required(),
-                    TextInput::make('jenis_mitra')->required(),
+                    TextInput::make('nama_perusahaan')->required()->label('Nama Perusahaan'),
+                    TextInput::make('jenis_mitra')->required()->label('Jenis Mitra'),
                     TextInput::make('email')->required(),
                     TextInput::make('website')->required()->url()
                         ->prefix('https://')
                         ->suffix('.com'),
                 ])->columns(2),
                 Section::make('Kontrak')->schema([
-                    TextInput::make('no_kontrak_perusahaan')->required(),
-                    DatePicker::make('tanggal_kontrak_awal_perusahaan')->format('Y-m-d')->required(),
-                    DatePicker::make('tanggal_kontrak_akhir_perusahaan')->format('Y-m-d')->required()->reactive()
+                    TextInput::make('no_kontrak_perusahaan')->required()->label('No. Kontrak Perusahaan'),
+                    DatePicker::make('tanggal_kontrak_awal_perusahaan')->format('Y-m-d')->required()->label('Tanggal Kontrak Awal Perusahaan'),
+                    DatePicker::make('tanggal_kontrak_akhir_perusahaan')->format('Y-m-d')->required()->label('Tanggal Kontrak Akhir Perusahaan')->reactive()
                         ->afterStateUpdated(function (Closure $set, $state) {
                             $set('status_kontrak_perusahaan', $state);
                         }),
-                    DatePicker::make('status_kontrak_perusahaan')->format('Y-m-d')->disabled()
+                    DatePicker::make('status_kontrak_perusahaan')->format('Y-m-d')->disabled()->label('Status Kontrak Perusahaan')
                 ])->columns(2),
                 Section::make('Contact')->schema([
                     TextInput::make('no_telp_1')->required()->tel()
-                        ->telRegex('/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/'),
+                        ->telRegex('/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/')
+                        ->label('No. Telp 1'),
                     TextInput::make('no_telp_2')->tel()
-                        ->telRegex('/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/'),
+                        ->telRegex('/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/')
+                        ->label('No. Telp 2'),
                     TextInput::make('no_telp_3')->tel()
-                        ->telRegex('/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/'),
+                        ->telRegex('/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/')
+                        ->label('No. Telp 3'),
                 ])
                     ->columns(3),
             ]);
@@ -76,17 +79,17 @@ class MitraPerusahaanResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('no_kontrak_perusahaan')->searchable(),
-                TextColumn::make('nama_perusahaan')->searchable(),
-                TextColumn::make('jenis_mitra')->searchable(),
+                TextColumn::make('no_kontrak_perusahaan')->searchable()->label('No. Kontrak Perusahaan'),
+                TextColumn::make('nama_perusahaan')->searchable()->label('Nama Perusahaan'),
+                TextColumn::make('jenis_mitra')->searchable()->label('Jenis Mitra'),
                 TextColumn::make('email')->searchable()->toggleable(),
                 TextColumn::make('website')->searchable()->toggleable(),
-                TextColumn::make('no_telp_1')->searchable()->toggleable(),
-                TextColumn::make('no_telp_2')->searchable()->toggleable(),
-                TextColumn::make('no_telp_3')->searchable()->toggleable(),
-                TextColumn::make('tanggal_kontrak_awal_perusahaan')->date()->searchable()->toggleable(),
-                TextColumn::make('tanggal_kontrak_akhir_perusahaan')->date()->searchable()->toggleable(),
-                IconColumn::make('status_kontrak_perusahaan')
+                TextColumn::make('no_telp_1')->searchable()->toggleable()->label('No. Telp 1'),
+                TextColumn::make('no_telp_2')->searchable()->toggleable()->label('No. Telp 2'),
+                TextColumn::make('no_telp_3')->searchable()->toggleable()->label('No. Telp 3'),
+                TextColumn::make('tanggal_kontrak_awal_perusahaan')->date()->searchable()->toggleable()->label('Tanggal Kontrak Awal Perusahaan'),
+                TextColumn::make('tanggal_kontrak_akhir_perusahaan')->date()->searchable()->toggleable()->label('Tanggal Kontrak Akhir Perusahaan'),
+                IconColumn::make('status_kontrak_perusahaan')->label('Status Kontrak Perusahaan')
                     ->options([
                         'heroicon-s-check-circle' => fn ($state): bool => $state > date('Y-m-d'),
                         'heroicon-s-x-circle' => fn ($state): bool => $state <= date('Y-m-d'), 'heroicon-s-exclamation-circle' =>

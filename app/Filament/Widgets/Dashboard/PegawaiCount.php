@@ -28,9 +28,9 @@ class PegawaiCount extends BaseWidget
                 ->description('Mitra Perusahaan')
                 ->descriptionIcon('heroicon-o-presentation-chart-line')
                 ->color('primary'),
-            Card::make('Jumlah Pegawai Belum Pensiun', $jmlhAktif)->chart([7, 2, 10, 3, 15, 4, 17])
+            Card::make('Jumlah Karyawan Belum Pensiun', $jmlhAktif)->chart([7, 2, 10, 3, 15, 4, 17])
                 ->color('success'),
-            Card::make('Jumlah Pegawai Pensiun', $jmlhPensiun)->chart([17, 4, 15, 3, 10, 2, 7])
+            Card::make('Jumlah Karyawan Pensiun', $jmlhPensiun)->chart([17, 4, 15, 3, 10, 2, 7])
                 ->color('danger'),
         ];
     }

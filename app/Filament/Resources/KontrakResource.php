@@ -23,9 +23,9 @@ class KontrakResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'nama_pegawai';
     protected static ?string $pluralModelLabel = 'Kontrak';
-    protected static ?string $navigationLabel = 'Pegawai Aktif';
+    protected static ?string $navigationLabel = 'Status Karyawan';
     protected static ?string $navigationIcon = 'heroicon-o-newspaper';
-    protected static ?string $navigationGroup = 'MANAJEMEN MASA KERJA PEGAWAI';
+    protected static ?string $navigationGroup = 'MANAJEMEN MASA KERJA KARYAWAN';
     protected static ?int $navigationSort = 2;
     protected static function getNavigationBadge(): ?string
     {
