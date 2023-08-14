@@ -5,26 +5,21 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\MitraPerusahaanResource\Pages;
 use App\Filament\Resources\MitraPerusahaanResource\RelationManagers;
 use App\Models\MitraPerusahaan;
-use Carbon\Carbon;
 use Closure;
-use Filament\Forms;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Card;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Section;
-use Filament\Resources\Pages\Page;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Widgets\StatsOverviewWidget;
-
 class MitraPerusahaanResource extends Resource
 {
     protected static ?string $model = MitraPerusahaan::class;
@@ -91,10 +86,22 @@ class MitraPerusahaanResource extends Resource
                 ->copyable()
                 ->copyMessage('Email address copied')
                 ->copyMessageDuration(1500),
-                TextColumn::make('website')->searchable()->toggleable(),
-                TextColumn::make('no_telp_1')->searchable()->toggleable()->label('No. Telp 1'),
-                TextColumn::make('no_telp_2')->searchable()->toggleable()->label('No. Telp 2')->placeholder('Tidak Ada'),
-                TextColumn::make('no_telp_3')->searchable()->toggleable()->label('No. Telp 3')->placeholder('Tidak Ada'),
+                BadgeColumn::make('website')->searchable()->toggleable()
+                ->color('secondary')
+                ->icon('heroicon-s-external-link')
+                ->url(fn ($record) => $record->website)
+                ->openUrlInNewTab(),
+                TextColumn::make('no_telp_1')->searchable()->toggleable()->label('No. Telp 1')->copyable()
+                ->copyMessage('No. Telp copied')
+                ->copyMessageDuration(1500),
+                TextColumn::make('no_telp_2')->searchable()->toggleable()->label('No. Telp 2')->placeholder('Tidak
+                Ada')->copyable()
+                ->copyMessage('No. Telp copied')
+                ->copyMessageDuration(1500),
+                TextColumn::make('no_telp_3')->searchable()->toggleable()->label('No. Telp 3')->placeholder('Tidak
+                Ada')->copyable()
+                ->copyMessage('No. Telp copied')
+                ->copyMessageDuration(1500),
                 TextColumn::make('tanggal_kontrak_awal_perusahaan')->date()->searchable()->toggleable()->label('Tanggal Kontrak Awal Perusahaan'),
                 TextColumn::make('tanggal_kontrak_akhir_perusahaan')->date()->searchable()->toggleable()->label('Tanggal Kontrak Akhir Perusahaan'),
                 IconColumn::make('status_kontrak_perusahaan')->label('Status Kontrak Perusahaan')
@@ -115,7 +122,17 @@ class MitraPerusahaanResource extends Resource
                         'TKJP' => 'TKJP',
                         'Konsultan' => 'Konsultan',
                         'Auditor' => 'Auditor',
-                    ])
+                    ]),
+                 Filter::make('status_kontrak_perusahaan')
+                 ->form([
+                 DatePicker::make('tanggal_kontrak_akhir_perusahaan'),
+                 ])
+                 ->query(function (Builder $query, array $data): Builder {
+                 return $query
+                 ->when(
+                 $data['tanggal_kontrak_akhir_perusahaan'],
+                 fn (Builder $query, $date): Builder => $query->whereDate('status_kontrak_perusahaan', '<=', $date), );
+                     })
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

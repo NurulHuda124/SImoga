@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('kontraks', function (Blueprint $table) {
             $table->id();
-            $table->string('no_induk_karyawan');
+            $table->string('no_induk_karyawan',25);
             $table->string('nama_karyawan');
             $table->string('email');
             $table->date('tanggal_lahir');
-            $table->string('no_kontrak_perusahaan');
+            $table->string('no_kontrak_perusahaan',25);
             $table->date('tanggal_kontrak_awal');
             $table->date('tanggal_kontrak_akhir');
             $table->date('status_kontrak');

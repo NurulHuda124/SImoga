@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\KontrakResource\Pages;
 use App\Models\Kontrak;
+use Carbon\Carbon;
 use DateTime;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
@@ -51,7 +52,7 @@ class KontrakResource extends Resource
                 ->copyMessageDuration(1500)->searchable()->toggleable(),
                 TextColumn::make('tanggal_lahir')->label('Tanggal Lahir')->date()->searchable()->toggleable(),
                 TextColumn::make('no_kontrak_perusahaan')
-                ->label('No Kontrak Perusahaan')->date()->searchable()->toggleable(),
+                ->label('No Kontrak Perusahaan')->searchable()->toggleable(),
                 TextColumn::make('tanggal_kontrak_awal')
                 ->label('Tanggal Kontrak Dimulai')->date()->searchable()->toggleable(),
                 TextColumn::make('tanggal_kontrak_akhir')
@@ -125,7 +126,18 @@ class KontrakResource extends Resource
                                 $data['tanggal_kontrak_akhir'],
                                 fn (Builder $query, $date): Builder => $query->whereDate('status_kontrak', '<=', $date),
                             );
-                    })
+                    }),
+                Filter::make('status_pensiun')
+                ->form([
+                DatePicker::make('tanggal_pensiun'),
+                ])
+                ->query(function (Builder $query, array $data): Builder {
+                return $query
+                ->when(
+                $data['tanggal_pensiun'],
+                fn (Builder $query, $date): Builder => $query->whereDate('status_pensiun', '<=', Carbon::parse($date)->
+                    subYears(56)),
+                    ); })
             ])
             ->actions([
                 // Tables\Actions\ViewAction::make(),

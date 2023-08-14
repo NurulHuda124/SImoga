@@ -177,7 +177,9 @@ class PegawaiResource extends Resource
                 TextColumn::make('tempat_lahir')->searchable()->toggleable()->label('Tempat Lahir'),
                 TextColumn::make('tanggal_lahir')->date()->searchable()->toggleable()->label('Tanggal Lahir'),
                 TextColumn::make('alamat')->searchable()->toggleable(),
-                TextColumn::make('no_telp')->searchable()->toggleable()->label('No. Telp'),
+                TextColumn::make('no_telp')->searchable()->toggleable()->label('No. Telp')->copyable()
+                ->copyMessage('No. Telp copied')
+                ->copyMessageDuration(1500),
                 TextColumn::make('jabatan')->searchable(),
                 TextColumn::make('divisi')->searchable(),
                 TextColumn::make('jenis_mitra')->searchable()->label('Jenis Mitra'),
