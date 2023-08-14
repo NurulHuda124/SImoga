@@ -39,7 +39,7 @@ class PegawaiResource extends Resource
 
     public static function getGloballySearchableAttributes(): array
     {
-        return ['nama_pegawai', 'jenis_mitra', 'email', 'jabatan', 'alamat'];
+        return ['nama_karyawan', 'jenis_mitra', 'email', 'jabatan', 'alamat'];
     }
     protected static ?string $pluralModelLabel = 'Karyawan';
     protected static ?string $navigationLabel = 'Karyawan';

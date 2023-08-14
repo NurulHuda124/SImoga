@@ -26,7 +26,7 @@ class MitraPerusahaanResource extends Resource
 
     public static function getGloballySearchableAttributes(): array
     {
-        return ['nama_perusahaan', 'jenis_mitra', 'email', 'website', 'no_telp'];
+        return ['nama_perusahaan', 'jenis_mitra', 'email', 'website', 'no_telp_1', 'no_telp_2','no_telp_3'];
     }
     protected static ?string $pluralModelLabel = 'Mitra Perusahaan';
     protected static ?string $navigationLabel = 'Mitra Perusahaan';
