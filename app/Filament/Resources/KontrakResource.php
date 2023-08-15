@@ -23,7 +23,7 @@ class KontrakResource extends Resource
 {
     protected static ?string $model = Kontrak::class;
 
-    protected static ?string $pluralModelLabel = 'Kontrak';
+    protected static ?string $pluralModelLabel = 'Status Karyawan';
     protected static ?string $navigationLabel = 'Status Karyawan';
     protected static ?string $navigationIcon = 'heroicon-o-newspaper';
     protected static ?string $navigationGroup = 'MANAJEMEN MASA KERJA KARYAWAN';

@@ -45,7 +45,7 @@ class StatsOverview extends BaseWidget
             if ($jmlhHabisKontrak > 0) {
             Notification::make()
                 ->title('**Kontrak Hampir Tidak Berlaku!**')
-                ->body('Jumlah Pegawai Kontrak Hampir Tidak Berlaku : ' . $jmlhHabisKontrak)
+                ->body('Jumlah Karyawan Kontrak Hampir Tidak Berlaku : ' . $jmlhHabisKontrak)
                 ->warning()
                 ->persistent()
                 ->sendToDatabase($recipient);
@@ -53,7 +53,7 @@ class StatsOverview extends BaseWidget
             if ($jmlhNonaktif > 0) {
                 Notification::make()
                 ->title('**Kontrak Tidak Berlaku!**')
-                ->body('Jumlah Pegawai Kontrak Tidak Berlaku : ' . $jmlhNonaktif)
+                ->body('Jumlah Karyawan Kontrak Tidak Berlaku : ' . $jmlhNonaktif)
                 ->danger()
                 ->persistent()
                 ->sendToDatabase($recipient);
@@ -61,7 +61,7 @@ class StatsOverview extends BaseWidget
             if ($jmlhHPensiun > 0) {
                 Notification::make()
                 ->title('**Hampir Pensiun!**')
-                ->body('Jumlah Pegawai Hampir Pensiun : ' . $jmlhHPensiun)
+                ->body('Jumlah Karyawan Hampir Pensiun : ' . $jmlhHPensiun)
                 ->warning()
                 ->persistent()
                 ->sendToDatabase($recipient);
@@ -69,7 +69,7 @@ class StatsOverview extends BaseWidget
             if ($jmlhPensiun > 0) {
                 Notification::make()
                 ->title('**Pensiun!**')
-                ->body('Jumlah Pegawai Pensiun : ' . $jmlhPensiun)
+                ->body('Jumlah Karyawan Pensiun : ' . $jmlhPensiun)
                 ->danger()
                 ->persistent()
                 ->sendToDatabase($recipient);
@@ -92,18 +92,18 @@ class StatsOverview extends BaseWidget
             ->persistent()
             ->sendToDatabase($recipient);
             }
-            
+
             // Tandai bahwa notifikasi telah ditampilkan dalam session
             session(['notification_shown' => true]);
         }
         return [
-            Card::make('Jumlah Pegawai Kontrak Berlaku', $jmlhAktif)->chart([7, 2, 10, 3, 15, 4, 17]),
-            Card::make('Jumlah Pegawai Kontrak Tidak Berlaku', $jmlhNonaktif)->chart([
+            Card::make('Jumlah Karyawan Kontrak Berlaku', $jmlhAktif)->chart([7, 2, 10, 3, 15, 4, 17]),
+            Card::make('Jumlah Karyawan Kontrak Tidak Berlaku', $jmlhNonaktif)->chart([
                 17, 4, 15, 3, 10, 2,
                 7
             ]),
-            Card::make('Jumlah Pegawai Belum Pensiun', $jmlhP)->chart([7, 2, 10, 3, 15, 4, 17]),
-            Card::make('Jumlah Pegawai Pensiun', $jmlhPensiun)->chart([17, 4, 15, 3, 10, 2, 7]),
+            Card::make('Jumlah Karyawan Belum Pensiun', $jmlhP)->chart([7, 2, 10, 3, 15, 4, 17]),
+            Card::make('Jumlah Karyawan Pensiun', $jmlhPensiun)->chart([17, 4, 15, 3, 10, 2, 7]),
         ];
     }
 }

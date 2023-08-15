@@ -9,7 +9,7 @@ use Filament\Resources\Pages\EditRecord;
 class EditPegawai extends EditRecord
 {
     protected static string $resource = PegawaiResource::class;
-
+    protected static ?string $title = "Edit Karyawan";
     protected function getActions(): array
     {
         return [
