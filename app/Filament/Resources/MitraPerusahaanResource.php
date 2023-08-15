@@ -20,13 +20,14 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Widgets\StatsOverviewWidget;
+
 class MitraPerusahaanResource extends Resource
 {
     protected static ?string $model = MitraPerusahaan::class;
 
     public static function getGloballySearchableAttributes(): array
     {
-        return ['nama_perusahaan', 'jenis_mitra', 'email', 'website', 'no_telp_1', 'no_telp_2','no_telp_3'];
+        return ['nama_perusahaan', 'jenis_mitra', 'email', 'website', 'no_telp_1', 'no_telp_2', 'no_telp_3'];
     }
     protected static ?string $pluralModelLabel = 'Mitra Perusahaan';
     protected static ?string $navigationLabel = 'Mitra Perusahaan';
@@ -48,7 +49,8 @@ class MitraPerusahaanResource extends Resource
                         ->suffix('.com'),
                 ])->columns(2),
                 Section::make('Kontrak')->schema([
-                    TextInput::make('no_kontrak_perusahaan')->required()->label('No. Kontrak Perusahaan'),
+                    TextInput::make('no_kontrak_perusahaan')->required()->label('No. Kontrak Perusahaan')
+                        ->unique(MitraPerusahaan::class, 'no_kontrak_perusahaan', ignoreRecord: true),
                     DatePicker::make('tanggal_kontrak_awal_perusahaan')->format('Y-m-d')->required()->label('Tanggal Kontrak Awal Perusahaan'),
                     DatePicker::make('tanggal_kontrak_akhir_perusahaan')->format('Y-m-d')->required()->label('Tanggal Kontrak Akhir Perusahaan')->reactive()
                         ->afterStateUpdated(function (Closure $set, $state) {
@@ -76,32 +78,32 @@ class MitraPerusahaanResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('no_kontrak_perusahaan')
-                ->searchable()
-                ->label('No. Kontrak Perusahaan'),
+                    ->searchable()
+                    ->label('No. Kontrak Perusahaan'),
                 TextColumn::make('nama_perusahaan')
-                ->searchable()
-                ->label('Nama Perusahaan'),
+                    ->searchable()
+                    ->label('Nama Perusahaan'),
                 TextColumn::make('jenis_mitra')->searchable()->label('Jenis Mitra'),
                 BadgeColumn::make('email')->searchable()->toggleable()->icon('heroicon-o-mail')->color('warning')
-                ->copyable()
-                ->copyMessage('Email address copied')
-                ->copyMessageDuration(1500),
+                    ->copyable()
+                    ->copyMessage('Email address copied')
+                    ->copyMessageDuration(1500),
                 BadgeColumn::make('website')->searchable()->toggleable()
-                ->color('secondary')
-                ->icon('heroicon-s-external-link')
-                ->url(fn ($record) => $record->website)
-                ->openUrlInNewTab(),
+                    ->color('secondary')
+                    ->icon('heroicon-s-external-link')
+                    ->url(fn ($record) => $record->website)
+                    ->openUrlInNewTab(),
                 TextColumn::make('no_telp_1')->searchable()->toggleable()->label('No. Telp 1')->copyable()
-                ->copyMessage('No. Telp copied')
-                ->copyMessageDuration(1500),
+                    ->copyMessage('No. Telp copied')
+                    ->copyMessageDuration(1500),
                 TextColumn::make('no_telp_2')->searchable()->toggleable()->label('No. Telp 2')->placeholder('Tidak
                 Ada')->copyable()
-                ->copyMessage('No. Telp copied')
-                ->copyMessageDuration(1500),
+                    ->copyMessage('No. Telp copied')
+                    ->copyMessageDuration(1500),
                 TextColumn::make('no_telp_3')->searchable()->toggleable()->label('No. Telp 3')->placeholder('Tidak
                 Ada')->copyable()
-                ->copyMessage('No. Telp copied')
-                ->copyMessageDuration(1500),
+                    ->copyMessage('No. Telp copied')
+                    ->copyMessageDuration(1500),
                 TextColumn::make('tanggal_kontrak_awal_perusahaan')->date()->searchable()->toggleable()->label('Tanggal Kontrak Awal Perusahaan'),
                 TextColumn::make('tanggal_kontrak_akhir_perusahaan')->date()->searchable()->toggleable()->label('Tanggal Kontrak Akhir Perusahaan'),
                 IconColumn::make('status_kontrak_perusahaan')->label('Status Kontrak Perusahaan')
@@ -114,7 +116,24 @@ class MitraPerusahaanResource extends Resource
                         'success' => fn ($state): bool => $state > date('Y-m-d'),
                         'danger' => fn ($state): bool => $state <= date('Y-m-d'), 'warning' => fn ($state): bool =>
                         $state > date('Y-m-d') && $state <= date('Y-m-d', strtotime('+1 years')),
-                    ])->size('xl'),
+                    ])->size('xl')
+                    ->tooltip(function (IconColumn $column) {
+                        $state = $column->getState();
+                        $currentDate = date('Y-m-d');
+                        $nextYearDate = date('Y-m-d', strtotime('+1 year'));
+
+                        if ($state > $nextYearDate) {
+                            return 'Kontrak Berlaku';
+                        } elseif ($state <= $currentDate) {
+                            return 'Kontrak Tidak Berlaku';
+                        } elseif (
+                            $state > $currentDate
+                            && $state <= $nextYearDate
+                        ) {
+                            return 'Kontrak Hampir Tidak Berlaku';
+                        }
+                        return null;
+                    }),
             ])
             ->filters([
                 SelectFilter::make('jenis_mitra')
@@ -123,16 +142,17 @@ class MitraPerusahaanResource extends Resource
                         'Konsultan' => 'Konsultan',
                         'Auditor' => 'Auditor',
                     ]),
-                 Filter::make('status_kontrak_perusahaan')
-                 ->form([
-                 DatePicker::make('tanggal_kontrak_akhir_perusahaan'),
-                 ])
-                 ->query(function (Builder $query, array $data): Builder {
-                 return $query
-                 ->when(
-                 $data['tanggal_kontrak_akhir_perusahaan'],
-                 fn (Builder $query, $date): Builder => $query->whereDate('status_kontrak_perusahaan', '<=', $date), );
-                     })
+                Filter::make('status_kontrak_perusahaan')
+                    ->form([
+                        DatePicker::make('tanggal_kontrak_akhir_perusahaan'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['tanggal_kontrak_akhir_perusahaan'],
+                                fn (Builder $query, $date): Builder => $query->whereDate('status_kontrak_perusahaan', '<=', $date),
+                            );
+                    })
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

@@ -48,15 +48,15 @@ class KontrakResource extends Resource
                 TextColumn::make('no_induk_karyawan')->label('No Induk Karyawan')->searchable(),
                 TextColumn::make('nama_karyawan')->label('Nama Karyawan')->searchable(),
                 BadgeColumn::make('email')->icon('heroicon-o-mail')->color('warning')->copyable()
-                ->copyMessage('Email address copied')
-                ->copyMessageDuration(1500)->searchable()->toggleable(),
+                    ->copyMessage('Email address copied')
+                    ->copyMessageDuration(1500)->searchable()->toggleable(),
                 TextColumn::make('tanggal_lahir')->label('Tanggal Lahir')->date()->searchable()->toggleable(),
                 TextColumn::make('no_kontrak_perusahaan')
-                ->label('No Kontrak Perusahaan')->searchable()->toggleable(),
+                    ->label('No Kontrak Perusahaan')->searchable()->toggleable(),
                 TextColumn::make('tanggal_kontrak_awal')
-                ->label('Tanggal Kontrak Dimulai')->date()->searchable()->toggleable(),
+                    ->label('Tanggal Kontrak Dimulai')->date()->searchable()->toggleable(),
                 TextColumn::make('tanggal_kontrak_akhir')
-                ->label('Tanggal Kontrak Berakhir')->date()->searchable()->toggleable(),
+                    ->label('Tanggal Kontrak Berakhir')->date()->searchable()->toggleable(),
                 IconColumn::make('status_kontrak')->label('Status Masa Kontrak')
                     ->options([
                         'heroicon-s-check-circle' => fn ($state): bool => $state > date('Y-m-d'),
@@ -70,8 +70,25 @@ class KontrakResource extends Resource
                         'warning' => fn ($state): bool =>
                         $state > date('Y-m-d') && $state <= date('Y-m-d', strtotime('+1 years')),
                     ])
-                    ->size('xl'),
-                IconColumn::make('status_pensiun')
+                    ->size('xl')
+                    ->tooltip(function (IconColumn $column) {
+                        $state = $column->getState();
+                        $currentDate = date('Y-m-d');
+                        $nextYearDate = date('Y-m-d', strtotime('+1 year'));
+
+                        if ($state > $nextYearDate) {
+                            return 'Kontrak Berlaku';
+                        } elseif ($state <= $currentDate) {
+                            return 'Kontrak Tidak Berlaku';
+                        } elseif (
+                            $state > $currentDate
+                            && $state <= $nextYearDate
+                        ) {
+                            return 'Kontrak Hampir Tidak Berlaku';
+                        }
+                        return null;
+                    }),
+                IconColumn::make('status_pensiun')->label('Status Pensiun')
                     ->options([
                         'heroicon-s-x-circle' => function ($state) {
                             $tanggalLahir = new DateTime($state);
@@ -114,6 +131,26 @@ class KontrakResource extends Resource
                             return $selisih->m == 0 && $sekarang < $setahunKemudian;
                         }
                     ])->size('xl')
+                    ->tooltip(function (IconColumn $column) {
+                        $state = $column->getState();
+                        $tanggalLahir = new DateTime($state);
+                        $tanggalPensiun = clone $tanggalLahir;
+                        $tanggalPensiun->modify('+56 years');
+                        $sekarang = new DateTime();
+                        $setahunKemudian = clone $sekarang;
+                        $setahunKemudian->modify('+1 years');
+                        $selisih1 = $tanggalLahir->diff($sekarang);
+                        $selisih2 = $tanggalPensiun->diff($setahunKemudian);
+
+                        if ($selisih2->y == 0 && $selisih2->m == 0 && $sekarang < $setahunKemudian) {
+                            return 'Hampir Pensiun';
+                        } elseif ($selisih1->y >= 56) {
+                            return 'Pensiun';
+                        } elseif ($selisih1->y < 56) {
+                            return 'Belum Pensiun';
+                        }
+                        return null;
+                    }),
             ])
             ->filters([
                 Filter::make('status_kontrak')
@@ -128,16 +165,16 @@ class KontrakResource extends Resource
                             );
                     }),
                 Filter::make('status_pensiun')
-                ->form([
-                DatePicker::make('tanggal_pensiun'),
-                ])
-                ->query(function (Builder $query, array $data): Builder {
-                return $query
-                ->when(
-                $data['tanggal_pensiun'],
-                fn (Builder $query, $date): Builder => $query->whereDate('status_pensiun', '<=', Carbon::parse($date)->
-                    subYears(56)),
-                    ); })
+                    ->form([
+                        DatePicker::make('tanggal_pensiun'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['tanggal_pensiun'],
+                                fn (Builder $query, $date): Builder => $query->whereDate('status_pensiun', '<=', Carbon::parse($date)->subYears(56)),
+                            );
+                    })
             ])
             ->actions([
                 // Tables\Actions\ViewAction::make(),

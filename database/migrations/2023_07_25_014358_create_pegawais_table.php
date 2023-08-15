@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('tempat_lahir');
             $table->date('tanggal_lahir');
             $table->string('alamat');
-            $table->bigInteger('no_telp');
+            $table->string('no_telp');
             $table->string('jabatan');
             $table->string('divisi');
             $table->string('jenis_mitra');

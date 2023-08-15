@@ -52,20 +52,22 @@ class PegawaiResource extends Resource
         return $form
             ->schema([
                 Section::make('Identitas Diri')->schema([
-                    TextInput::make('no_induk_karyawan')->required()->label('No. Induk Karyawan'),
+                    TextInput::make('no_induk_karyawan')
+                        ->required()->label('No. Induk Karyawan')
+                        ->unique(Pegawai::class, 'no_induk_karyawan', ignoreRecord: true),
                     TextInput::make('nama_karyawan')->required()->label('Nama Karyawan'),
                     TextInput::make('nik')->required()
                         ->label('NIK')
-                        ->tel()
-                        ->telRegex('/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/'),
+                        ->numeric()
+                        ->unique(Pegawai::class, 'nik', ignoreRecord: true),
                     TextInput::make('email')->required(),
                     TextInput::make('tempat_lahir')->required()->label('Tempat Lahir'),
                     DatePicker::make('tanggal_lahir')->format('Y-m-d')->required()->label('Tanggal Lahir'),
                     Select::make('sex')->label('Jenis_kelamin')->required()
-                    ->options([
-                        'laki-laki'=>'Laki-laki',
-                        'perempuan'=>'Perempuan'
-                    ]),
+                        ->options([
+                            'laki-laki' => 'Laki-laki',
+                            'perempuan' => 'Perempuan'
+                        ]),
                     Select::make('jabatan')->required()
                         ->options(Jabatan::all()->pluck('jabatan', 'jabatan')),
                     Select::make('divisi')->label('Fungsi')->required()
@@ -73,7 +75,7 @@ class PegawaiResource extends Resource
                     TextInput::make('no_telp')->required()
                         ->label('No. Telp')
                         ->tel()
-                        ->telRegex('/^([+]?(?:[(][0-9]{1,4}[)])?[-\s\.\/0-9]*)$/'),
+                        ->telRegex('/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/'),
                     TextArea::make('alamat')->required(),
                 ])->columns(2),
                 Section::make('Unggah Berkas')->schema([
@@ -170,20 +172,20 @@ class PegawaiResource extends Resource
                 TextColumn::make('nama_karyawan')->searchable()->label('Nama Karyawan'),
                 TextColumn::make('nik')->searchable()->label('NIK'),
                 BadgeColumn::make('email')->searchable()->toggleable()->icon('heroicon-o-mail')->color('warning')
-                ->copyable()
-                ->copyMessage('Email address copied')
-                ->copyMessageDuration(1500),
+                    ->copyable()
+                    ->copyMessage('Email address copied')
+                    ->copyMessageDuration(1500),
                 TextColumn::make('sex')->searchable()->label('Jenis Kelamin'),
                 TextColumn::make('tempat_lahir')->searchable()->toggleable()->label('Tempat Lahir'),
                 TextColumn::make('tanggal_lahir')->date()->searchable()->toggleable()->label('Tanggal Lahir'),
-                TextColumn::make('alamat')->searchable()->toggleable(),
+                TextColumn::make('alamat')->limit(40)->searchable()->toggleable(),
                 TextColumn::make('no_telp')->searchable()->toggleable()->label('No. Telp')->copyable()
-                ->copyMessage('No. Telp copied')
-                ->copyMessageDuration(1500),
+                    ->copyMessage('No. Telp copied')
+                    ->copyMessageDuration(1500),
                 TextColumn::make('jabatan')->searchable(),
-                TextColumn::make('divisi')->searchable(),
+                TextColumn::make('divisi')->limit(40)->searchable(),
                 TextColumn::make('jenis_mitra')->searchable()->label('Jenis Mitra'),
-                TextColumn::make('nama_perusahaan')->searchable()->toggleable()->label('Nama Perusahaan'),
+                TextColumn::make('nama_perusahaan')->limit(40)->searchable()->toggleable()->label('Nama Perusahaan'),
                 TextColumn::make('no_kontrak_perusahaan')->searchable()->toggleable()->label('No. Kontrak Perusahaan'),
                 TextColumn::make('tanggal_kontrak_awal_perusahaan')->date()->searchable()->toggleable()->label('Tanggal Kontrak Awal Perusahaan'),
                 TextColumn::make('tanggal_kontrak_akhir_perusahaan')->date()->searchable()->toggleable()->label('Tanggal Kontrak Akhir Perusahaan'),

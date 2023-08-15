@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Card;
+use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\TextColumn;
 
 class UserResource extends Resource
@@ -46,7 +47,10 @@ class UserResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')->label('Nama')->searchable(),
-                TextColumn::make('email')->searchable(),
+                BadgeColumn::make('email')->searchable()->icon('heroicon-o-mail')->color('warning')
+                ->copyable()
+                ->copyMessage('Email address copied')
+                ->copyMessageDuration(1500),
                 // TextColumn::make('password'),
             ])
             ->filters([
