@@ -4,8 +4,6 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\PegawaiResource\Pages;
 use App\Filament\Resources\PegawaiResource\RelationManagers\HistoryRelationManager;
-use App\Models\Pegawai;
-use App\Models\Jabatan;
 use App\Models\Divisi;
 use App\Models\Jabatan;
 use App\Models\MitraPerusahaan;
