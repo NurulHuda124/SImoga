@@ -11,8 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pegawais', function (Blueprint $table) {
+        Schema::create('history', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('pegawai_id');
             $table->string('no_induk_karyawan',25);
             $table->string('file_ktp');
             $table->string('file_nda');
@@ -31,8 +32,10 @@ return new class extends Migration
             $table->string('no_kontrak_perusahaan',25);
             $table->date('tanggal_kontrak_awal_perusahaan');
             $table->date('tanggal_kontrak_akhir_perusahaan');
-            $table->date('tanggal_kontrak_awal'); 
+            $table->date('tanggal_kontrak_awal');
             $table->date('tanggal_kontrak_akhir');
+            $table->date('status_kontrak');
+            $table->date('status_pensiun');
             $table->timestamps();
         });
     }
@@ -42,6 +45,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pegawais');
+        Schema::dropIfExists('history');
     }
 };

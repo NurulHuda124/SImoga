@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\MitraPerusahaanResource\Pages;
 use App\Filament\Resources\MitraPerusahaanResource\RelationManagers;
+use App\Filament\Resources\MitraPerusahaanResource\RelationManagers\RiwayatRelationManager;
 use App\Models\MitraPerusahaan;
 use Closure;
 use Filament\Resources\Form;
@@ -155,7 +156,11 @@ class MitraPerusahaanResource extends Resource
                     })
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                // Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('show')->label('PDF')
+                ->icon('heroicon-s-printer')
+                ->url(fn (MitraPerusahaan $record) => route('downloadmitra.pdf', $record))
+                ->openUrlInNewTab(),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
@@ -165,7 +170,7 @@ class MitraPerusahaanResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RiwayatRelationManager::class,
         ];
     }
 

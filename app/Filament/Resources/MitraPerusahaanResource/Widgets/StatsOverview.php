@@ -23,8 +23,8 @@ class StatsOverview extends BaseWidget
                 ->description('Mitra Perusahaan')
                 ->descriptionIcon('heroicon-o-presentation-chart-line')
                 ->color('primary'),
-            Card::make('Jumlah Perusahaan Kontrak Berlaku', $jmlhAktif),
-            Card::make('Jumlah Perusahaan Kontrak Tidak Berlaku', $jmlhNonaktif)
+            Card::make('Jumlah Kontrak Berlaku', $jmlhAktif),
+            Card::make('Jumlah Kontrak Tidak Berlaku', $jmlhNonaktif)
         ];
     }
 }

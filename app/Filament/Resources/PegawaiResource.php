@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\PegawaiResource\Pages;
+use App\Filament\Resources\PegawaiResource\RelationManagers\HistoryRelationManager;
 use App\Models\Pegawai;
 use App\Models\Jabatan;
 use App\Models\Divisi;
@@ -80,7 +81,6 @@ class PegawaiResource extends Resource
                 ])->columns(2),
                 Section::make('Unggah Berkas')->schema([
                     FileUpload::make('file_ktp')
-                        ->image()
                         ->enableDownload()
                         ->enableOpen()
                         ->label('File KTP')
@@ -149,8 +149,8 @@ class PegawaiResource extends Resource
                         }),
                 ])->columns(2),
                 Section::make('Masa Kerja')->schema([
-                    DatePicker::make('tanggal_kontrak_awal')->format('Y-m-d')->required()->label('Tanggal Kontrak Awal'),
-                    DatePicker::make('tanggal_kontrak_akhir')->format('Y-m-d')->required()->label('Tanggal Kontrak Akhir'),
+                    DatePicker::make('tanggal_kontrak_awal')->format('Y-m-d')->required()->label('Tanggal Kontrak Awal Karyawan'),
+                    DatePicker::make('tanggal_kontrak_akhir')->format('Y-m-d')->required()->label('Tanggal Kontrak Akhir Karyawan'),
                 ])->columns(2),
             ]);
     }
@@ -160,9 +160,10 @@ class PegawaiResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('no_induk_karyawan')->searchable()->label('No. Induk Karyawan'),
-                ImageColumn::make('file_ktp')->width(100)->height('auto')
-                    ->label('File KTP')
-                    ->url(fn ($record) => Storage::url($record->file_ktp))
+                BadgeColumn::make('file_ktp')
+                    ->label('File KTP')->color('secondary')
+                    ->limit(20)->icon('heroicon-s-external-link')
+                    ->url(fn ($record) => Storage::url($record->file_nda))
                     ->openUrlInNewTab(),
                 BadgeColumn::make('file_nda')
                     ->label('File NDA')->color('primary')
@@ -189,8 +190,8 @@ class PegawaiResource extends Resource
                 TextColumn::make('no_kontrak_perusahaan')->searchable()->toggleable()->label('No. Kontrak Perusahaan'),
                 TextColumn::make('tanggal_kontrak_awal_perusahaan')->date()->searchable()->toggleable()->label('Tanggal Kontrak Awal Perusahaan'),
                 TextColumn::make('tanggal_kontrak_akhir_perusahaan')->date()->searchable()->toggleable()->label('Tanggal Kontrak Akhir Perusahaan'),
-                TextColumn::make('tanggal_kontrak_awal')->date()->searchable()->toggleable()->label('Tanggal Kontrak Awal'),
-                TextColumn::make('tanggal_kontrak_akhir')->date()->searchable()->toggleable()->label('Tanggal Kontrak Akhir'),
+                TextColumn::make('tanggal_kontrak_awal')->date()->searchable()->toggleable()->label('Tanggal Kontrak Awal Karyawan'),
+                TextColumn::make('tanggal_kontrak_akhir')->date()->searchable()->toggleable()->label('Tanggal Kontrak Akhir Karyawan'),
             ])
             ->filters([
                 SelectFilter::make('jenis_mitra')
@@ -212,7 +213,7 @@ class PegawaiResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            HistoryRelationManager::class,
         ];
     }
 

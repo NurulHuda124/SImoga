@@ -18,6 +18,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('downloadpensiun/{id}', [PDFController::class, 'pensiunpdf'])->name('downloadpensiun.pdf');
+Route::get('downloadmitra/{id}', [PDFController::class, 'mitrapdf'])->name('downloadmitra.pdf');
+Route::get('downloadriwayat/{id}', [PDFController::class, 'riwayatpdf'])->name('downloadriwayat.pdf');
+Route::get('downloadhistory/{id}', [PDFController::class, 'historypdf'])->name('downloadhistory.pdf');
 Route::get('download/{id}', [PDFController::class,'kontrakpdf'])->name('downloadkontrak.pdf');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
