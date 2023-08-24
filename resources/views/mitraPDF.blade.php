@@ -2,10 +2,10 @@
 <html>
 
 <head>
-    <title>Laporan Masa mitra mitra</title>
+    <title>Laporan Masa Mitra Perusahaan</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Times New Roman';
         }
 
         .header {
@@ -24,19 +24,18 @@
         }
 
         table {
-            width: 100%;
+            width: 95%;
             border-collapse: collapse;
+        }
+
+        .kolom {
+            padding-left: 60px;
         }
 
         th,
         td {
-            border: 1px solid black;
-            padding: 8px;
+            padding: 6px;
             text-align: left;
-        }
-
-        th {
-            background-color: #f2f2f2;
         }
 
         .container {
@@ -58,19 +57,53 @@
 
         .date {
             margin-top: -30px;
+            margin-bottom: 40px;
+        }
+
+        .kop {
+            border-collapse: collapse;
+            border: 0;
+            width: 100%;
+            text-align: center;
+        }
+
+        .left {
+            align: left;
+            width: 15%;
+            height: auto;
+        }
+
+        .center {
+            text-align: center;
+            width: 70%;
+        }
+
+        .right {
+            align: left;
+            width: 15%;
         }
     </style>
 </head>
 
 <body>
     <div class="header">
-        <div class="logo">
-            <img src="img/pertamina.jpg" alt="Company Logo">
-        </div>
-        <div class="company-info">
-            <h3 class="company_name">PT. PERTAMINA EP CEPU ZONA 11 REGION 4 SUKOWATI FIELD</h3>
-            <p class="address">Jl. Lingkar Pertamina, Desa Rahayu, Kecamatan Soko Tuban 62372, Jawa Timur</p>
-        </div>
+        <table class="kop">
+            <tr>
+                <td class="left"><img src="img/pertamina.jpg" width="120px" height="auto" alt="Logo"></td>
+                <td class="center">
+                    <div>
+                        <span style="font-family: 'Times New Roman'; font-size:14pt"><strong>PT.
+                                PERTAMINA EP CEPU ZONA
+                                11 REGION 4 SUKOWATI FIELD</strong></span><br />
+                        <span style="font-family: 'Times New Roman'; font-size:11pt">Jl. Lingkar Pertamina, Desa Rahayu,
+                            Kecamatan Soko Tuban 62372, Jawa Timur</span><br />
+                        <span style="font-family: 'Times New Roman'; font-size:11ptt">Telepon (0356) 811911
+                            <br>http://www.pertamina.com</span>
+                    </div>
+                </td>
+                <td class="right"><img src="img/sk.jpg" width="150px" height="auto" alt="Logo"></td>
+            </tr>
+        </table>
     </div>
 
     <div class="container">
@@ -78,48 +111,58 @@
         <div class="date">
             <p>Dibuat Pada: <?php echo date('d-m-Y'); ?></p>
         </div>
-        <table>
+        <table class="kolom">
             <tr>
                 <th>Nomor Kontrak Perusahaan</th>
-                <td>{{ $mitra->no_kontrak_perusahaan }}</td>
+                <td>: {{ $mitra->no_kontrak_perusahaan }}</td>
             </tr>
             <tr>
                 <th>Nama Mitra Perusahaan</th>
-                <td>{{ $mitra->nama_perusahaan }}</td>
+                <td>: {{ $mitra->nama_perusahaan }}</td>
             </tr>
             <tr>
                 <th>Email</th>
-                <td>{{ $mitra->email }}</td>
+                <td>: {{ $mitra->email }}</td>
             </tr>
             <tr>
                 <th>Jenis Mitra</th>
-                <td>{{ $mitra->jenis_mitra }}</td>
+                <td>: {{ $mitra->jenis_mitra }}</td>
             </tr>
             <tr>
                 <th>Website</th>
-                <td>{{ $mitra->website }}</td>
+                <td>: {{ $mitra->website }}</td>
             </tr>
             <tr>
                 <th>No. Telp 1</th>
-                <td>{{ $mitra->no_telp_1 }}</td>
+                <td>: {{ $mitra->no_telp_1 }}</td>
             </tr>
             <tr>
                 <th>No. Telp 2</th>
-                <td>{{ $mitra->no_telp_2 }}</td>
+                @if ($mitra->no_telp_2 === null)
+                    <td>: -</td>
+                @else
+                    <td>: {{ $mitra->no_telp_2 }}</td>
+                @endif
             </tr>
             <tr>
                 <th>No. Telp 3</th>
-                <td>{{ $mitra->no_telp_3 }}</td>
+                @if ($mitra->no_telp_3 === null)
+                    <td>: -</td>
+                @else
+                    <td>: {{ $mitra->no_telp_3 }}</td>
+                @endif
             </tr>
             <tr>
-                <th>Tanggal Kontrak Perusahaan Mitra Dimulai</th>
-                <td>{{ \Carbon\Carbon::parse($mitra->tanggal_kontrak_awal_perusahaan)->format('d-m-Y') }}</td>
+                <th>Tanggal Kontrak Perusahaan Mitra</th>
             </tr>
             <tr>
-                <th>Tanggal Kontrak Perusahaan Mitra Berakhir</th>
-                <td>{{ \Carbon\Carbon::parse($mitra->tanggal_kontrak_akhir_perusahaan)->format('d-m-Y') }}</td>
+                <th>a. Dimulai</th>
+                <td>: {{ \Carbon\Carbon::parse($mitra->tanggal_kontrak_awal_perusahaan)->format('d-m-Y') }}</td>
             </tr>
-            <!-- Add more details as needed -->
+            <tr>
+                <th>b. Berakhir</th>
+                <td>: {{ \Carbon\Carbon::parse($mitra->tanggal_kontrak_akhir_perusahaan)->format('d-m-Y') }}</td>
+            </tr>
         </table>
     </div>
 </body>
